@@ -201,7 +201,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
 
       {/* ✅ Unified Toast */}
       {toast.open && (
-        <div className="fixed z-[80] top-4 right-4">
+        <div className="fixed z-80 top-4 right-4">
           <div className={`flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ${toastStyles.wrap}`}>
             <div className={`flex h-8 w-8 items-center justify-center rounded-full ${toastStyles.dot}`}>
               ✓
@@ -216,7 +216,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
         type="button"
         onClick={openCreateModal}
         className="
-          sm:hidden fixed bottom-5 right-5 z-[60]
+          sm:hidden fixed bottom-5 right-5 z-60
           h-14 w-14 rounded-full bg-gray-900 text-white shadow-lg
           flex items-center justify-center active:scale-95
           focus:outline-none focus:ring-2 focus:ring-gray-300

@@ -53,7 +53,7 @@ export function AssistantMenu({
             className={`${itemBase} text-gray-800 hover:bg-gray-100`}
             onClick={onEdit}
           >
-            <SquarePen className="w-4 h-4 transition-transform duration-200 group-hover:rotate-[-6deg]" />
+            <SquarePen className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-6" />
             Edit
           </button>
 
@@ -61,7 +61,7 @@ export function AssistantMenu({
             className={`${itemBase} text-red-600 hover:bg-red-50`}
             onClick={() => setConfirmDelete(true)}
           >
-            <Trash className="w-4 h-4 transition-transform duration-200 hover:rotate-[-6deg]" />
+            <Trash className="w-4 h-4 transition-transform duration-200 hover:-rotate-6" />
             Delete
           </button>
 
@@ -82,7 +82,7 @@ export function AssistantMenu({
               cursor-pointer w-full flex items-center justify-center gap-1
               px-2 py-1.5 rounded-md border text-xs
               transition-all duration-200 ease-out
-              hover:bg-gray-50 hover:-translate-y-[1px]
+              hover:bg-gray-50 hover:-translate-y-px
               active:translate-y-0 active:scale-[0.99]
               focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300
             "
@@ -97,7 +97,7 @@ export function AssistantMenu({
               cursor-pointer w-full flex items-center justify-center gap-1
               px-2 py-1.5 rounded-md bg-red-600 text-white text-xs
               transition-all duration-200 ease-out
-              hover:bg-red-700 hover:-translate-y-[1px]
+              hover:bg-red-700 hover:-translate-y-px
               active:translate-y-0 active:scale-[0.99]
               focus:outline-none focus-visible:ring-2 focus-visible:ring-red-200
             "

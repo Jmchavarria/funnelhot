@@ -182,7 +182,7 @@ export function useAssistants(itemsPerPage: number) {
     assistants,
     searchTerm,
     sortConfig,
-    currentPage,
+    currentPage,    
     totalPages,
     isModalOpen,
     editingAssistantIndex,
