@@ -11,11 +11,15 @@ export function useFloatingMenu() {
   const buttonRefs = useRef<{ [key: number]: HTMLButtonElement | null }>({});
 
   useEffect(() => {
+    // Maneja clics fuera del menú flotante para cerrarlo
     const handleClickOutside = (event: MouseEvent) => {
+      // Si el menú no está abierto, no hacer nada
       if (openMenuRow === null) return;
+      
       const target = event.target as HTMLElement;
+      // Cerrar menú si el clic no está dentro del dropdown ni del botón
       if (!target.closest('.menu-dropdown') && !target.closest('.menu-button')) {
-        setOpenMenuRow(null);
+      setOpenMenuRow(null);
       }
     };
 

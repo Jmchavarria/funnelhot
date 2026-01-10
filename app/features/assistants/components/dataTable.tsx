@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { NewAssistantModal } from './newAssistantModal';
+import { NewAssistantModal } from './assistants/newAssistantModal/newAssistantModal';
 import { PaginationFooter } from '@/app/shared/components/pagination';
 import { DataTableProps } from '@/app/types';
 
@@ -18,6 +18,7 @@ import { useAssistants } from '../hooks/useAssistants';
 import { useFloatingMenu } from '@/app/hooks/useFloatingMenu';
 import { AssistantMenu } from './assistantMenu';
 import { SearchBar } from '@/app/shared/components/searchBar';
+import { Toast } from './toast';
 
 type ToastKind = 'success' | 'danger';
 
@@ -107,12 +108,15 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           return '';
       }
     })();
-
     setToast({
       open: true,
       title,
-      kind: lastAction.type === 'cleared' ? 'danger' : 'success',
+      kind:
+        lastAction.type === 'deleted' || lastAction.type === 'cleared'
+          ? 'danger'
+          : 'success',
     });
+
 
     // Auto-close del toast
     const t = setTimeout(() => {
@@ -130,14 +134,15 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
   const toastStyles = useMemo(() => {
     return toast.kind === 'danger'
       ? {
-          wrap: 'bg-red-600 text-white border border-red-700',
-          dot: 'bg-red-500',
-        }
+        wrap: 'bg-red-600/95 text-white border border-red-700',
+        dot: 'bg-red-500',
+      }
       : {
-          wrap: 'bg-emerald-600 text-white border border-emerald-700',
-          dot: 'bg-emerald-500',
-        };
+        wrap: 'bg-emerald-600/95 text-white border border-emerald-700',
+        dot: 'bg-emerald-500',
+      };
   }, [toast.kind]);
+
 
   /* ---------------- Search + Filter ---------------- */
 
@@ -258,11 +263,11 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
                   onDelete={() => handleDelete(indexInPage)}
                   onTrain={() => handleTrain(indexInPage)}
 
-                  /**
-                   * ✅ Mejor alternativa (sin bug):
-                   * onTrain={() => item?.id && router.push(`/train/${item.id}`)}
-                   * (así no dependes de indices globales con filtros)
-                   */
+                /**
+                 * ✅ Mejor alternativa (sin bug):
+                 * onTrain={() => item?.id && router.push(`/train/${item.id}`)}
+                 * (así no dependes de indices globales con filtros)
+                 */
                 />
               ))
             ) : (
@@ -308,16 +313,12 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
       />
 
       {/* Toast simple: solo muestra feedback visual de acciones */}
-      {toast.open && (
-        <div className="fixed z-80 top-4 right-4">
-          <div className={`flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg ${toastStyles.wrap}`}>
-            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${toastStyles.dot}`}>
-              ✓
-            </div>
-            <p className="text-sm font-medium">{toast.title}</p>
-          </div>
-        </div>
-      )}
+      <Toast
+        open={toast.open}
+        title={toast.title}
+        kind={toast.kind}
+        onClose={() => setToast((p) => ({ ...p, open: false }))}
+      />
 
       {/* FAB móvil: acceso rápido a "New Assistant" */}
       <button

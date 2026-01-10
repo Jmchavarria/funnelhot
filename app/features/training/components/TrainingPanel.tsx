@@ -58,14 +58,14 @@ export const TrainingPanel = ({
                 <div className="mt-2 flex items-center justify-end gap-2">
                   <button
                     onClick={() => usePrompt(p)}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
+                    className="cursor-pointer px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition"
                   >
                     Use
                   </button>
 
                   <button
                     onClick={() => copyPrompt(p)}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition inline-flex items-center gap-1.5"
+                    className="cursor-pointer px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition inline-flex items-center gap-1.5"
                   >
                     <Copy className="w-3.5 h-3.5" />
                     Copy
@@ -73,7 +73,7 @@ export const TrainingPanel = ({
 
                   <button
                     onClick={() => deletePrompt(idx)}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-50 hover:bg-red-100 text-red-700 transition inline-flex items-center gap-1.5"
+                    className="cursor-pointer  px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-50 hover:bg-red-100 text-red-700 transition inline-flex items-center gap-1.5"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     Delete

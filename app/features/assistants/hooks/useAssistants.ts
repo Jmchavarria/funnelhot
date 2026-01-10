@@ -19,6 +19,22 @@ export type AssistantsAction =
   | { type: 'cleared' }
   | null;
 
+/**
+ * Enriquece un objeto asistente nuevo con propiedades por defecto y valores generados aleatoriamente.
+ * 
+ * @param newAssistant - El objeto asistente a enriquecer. Debe contener al menos una propiedad `tone`.
+ * @returns Un objeto asistente enriquecido con las siguientes propiedades añadidas:
+ *   - `id`: Un identificador único basado en la marca de tiempo actual
+ *   - `personality`: Derivada de la propiedad `tone` o por defecto 'Professional'
+ *   - `charges`: Un objeto que contiene valores aleatorios para los estados `inUse`, `free` e `offline`
+ *   - `systems`: Un objeto con `workStatus` establecido en 'Operational' y un valor aleatorio de `fuelInStorage`
+ *   - `satisfaction`: Un objeto que contiene un valor de porcentaje aleatorio y un período de 'Last 30 days'
+ * 
+ * @example
+ * const newAssistant = { name: 'Assistant A', tone: 'Friendly' };
+ * const enriched = defaultEnrichAssistant(newAssistant);
+ * // Retorna: { name: 'Assistant A', tone: 'Friendly', id: '1234567890', personality: 'Friendly', ... }
+ */
 function defaultEnrichAssistant(newAssistant: any) {
   return {
     ...newAssistant,

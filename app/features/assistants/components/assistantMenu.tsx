@@ -14,6 +14,36 @@ type Props = {
   onTrain: () => void;
 };
 
+/**
+ * AssistantMenu - Componente de menú contextual para acciones de asistente
+ * 
+ * Muestra un menú desplegable flotante con opciones para editar, eliminar o entrenar un asistente.
+ * Incluye un diálogo de confirmación para acciones de eliminación. Solo visible en pantallas de escritorio/tablet (punto de ruptura sm en adelante).
+ * 
+ * @component
+ * @example
+ * ```tsx
+ * <AssistantMenu
+ *   open={isMenuOpen}
+ *   top={mouseY}
+ *   left={mouseX}
+ *   menuRef={menuRef}
+ *   onEdit={handleEdit}
+ *   onDelete={handleDelete}
+ *   onTrain={handleTrain}
+ * />
+ * ```
+ * 
+ * @param {boolean} open - Controla la visibilidad del menú
+ * @param {number} top - Posición superior en píxeles para posicionamiento absoluto
+ * @param {number} left - Posición izquierda en píxeles para posicionamiento absoluto
+ * @param {React.RefObject<HTMLDivElement>} menuRef - Referencia al elemento contenedor del menú
+ * @param {() => void} onEdit - Callback ejecutado cuando se hace clic en el botón editar
+ * @param {() => void} onDelete - Callback ejecutado cuando se confirma la eliminación
+ * @param {() => void} onTrain - Callback ejecutado cuando se hace clic en el botón entrenar
+ * 
+ * @returns {React.ReactNode} El componente del menú desplegable o null si no está abierto
+ */
 export function AssistantMenu({
   open,
   top,
