@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { getAssistantTraining, saveAssistantTraining } from '@/app/lib/trainingStorage';
 
 type ChatMsg = { role: 'user' | 'assistant'; content: string };
 
@@ -40,6 +41,18 @@ export default function TrainPage() {
   const promptsKey = `training_prompts_${id}`;
   const draftKey = `training_draft_${id}`; // optional: persist draft without saving as prompt
 
+
+  const handleSavePrompt = () => {
+    if (!trainingData.trim()) return;
+
+    const next = [trainingData, ...trainingPrompts.filter(p => p !== trainingData)];
+
+    setTrainingPrompts(next);
+    saveAssistantTraining(id, next);
+
+    setTrainingData('');
+  };
+
   // Simulated responses
   const simulatedResponses = useMemo(
     () => [
@@ -54,6 +67,14 @@ export default function TrainPage() {
     ],
     []
   );
+
+
+  useEffect(() => {
+    if (!id) return;
+
+    const prompts = getAssistantTraining(id);
+    setTrainingPrompts(prompts);
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
@@ -80,7 +101,7 @@ export default function TrainPage() {
       try {
         const arr = JSON.parse(savedPrompts);
         if (Array.isArray(arr)) setTrainingPrompts(arr.filter(Boolean));
-      } catch {}
+      } catch { }
     }
 
     // ✅ load draft (last thing you were typing)
@@ -92,7 +113,7 @@ export default function TrainPage() {
     if (savedChat) {
       try {
         setMessages(JSON.parse(savedChat));
-      } catch {}
+      } catch { }
     }
   }, [id, promptsKey, draftKey]);
 
@@ -138,7 +159,7 @@ export default function TrainPage() {
       await navigator.clipboard.writeText(prompt);
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 1200);
-    } catch {}
+    } catch { }
   };
 
   const handleDeletePrompt = (idx: number) => {
@@ -406,11 +427,10 @@ export default function TrainPage() {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] sm:max-w-[75%] px-4 py-2 rounded-2xl text-sm break-words ${
-                      msg.role === 'user'
-                        ? 'bg-black text-white'
-                        : 'bg-white border border-gray-200 text-gray-800'
-                    }`}
+                    className={`max-w-[85%] sm:max-w-[75%] px-4 py-2 rounded-2xl text-sm break-words ${msg.role === 'user'
+                      ? 'bg-black text-white'
+                      : 'bg-white border border-gray-200 text-gray-800'
+                      }`}
                   >
                     <p className="text-sm leading-relaxed">{msg.content}</p>
                   </div>

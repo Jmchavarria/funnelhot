@@ -102,7 +102,7 @@ function MobileAssistantRow({
             <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-gray-500">
               <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border border-gray-100 px-2 py-0.5">
                 <Globe className="w-3.5 h-3.5" />
-                <span className="truncate max-w-[160px]">{item.language}</span>
+                <span className="truncate max-w-40">{item.language}</span>
               </span>
 
               {item.personality && (
@@ -254,11 +254,16 @@ function DesktopAssistantCard({
         </h3>
 
         <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500 mt-1">
+
+
           <span className="flex items-center gap-1">
-            <Hash className="w-3.5 h-3.5" />
-            {item.id}
+            <Globe className="w-3.5 h-3.5" />
+            {item.language}
           </span>
-          <span>{item.personality}</span>
+
+          <span className='flex items-center gap-1'>
+            <Sparkles className="w-3.5 h-3.5" />
+            {item.personality}</span>
         </div>
       </div>
 
