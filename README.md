@@ -1,7 +1,6 @@
 # 🧠 Funnelhot – Prueba Técnica
 
-Plataforma de gestión y entrenamiento de asistentes inteligentes desarrollada como prueba técnica para Funnelhot.
-
+Plataforma de gestión y entrenamiento de asistentes inteligentes desarrollada como prueba técnica para Funnelhot.  
 Incluye dashboard de asistentes, sistema de entrenamiento de prompts y simulación de chat por asistente.
 
 🔗 **Demo:** https://funnelhotassitant.vercel.app
@@ -10,12 +9,12 @@ Incluye dashboard de asistentes, sistema de entrenamiento de prompts y simulaci�
 
 ## 🚀 Tecnologías
 
-- Next.js (App Router)
-- React + TypeScript
-- Tailwind CSS
-- localStorage
-- Hooks personalizados
-- lucide-react
+- **Next.js (App Router)**
+- **React + TypeScript**
+- **Tailwind CSS**
+- **localStorage** (persistencia local)
+- **Hooks personalizados**
+- **lucide-react** (iconografía)
 
 ---
 
@@ -25,7 +24,7 @@ Incluye dashboard de asistentes, sistema de entrenamiento de prompts y simulaci�
 - Crear, editar y eliminar asistentes.
 - Búsqueda por nombre, idioma, personalidad e ID.
 - Paginación automática.
-- Menú flotante por asistente.
+- Menú flotante contextual por asistente.
 
 ### 🧠 Entrenamiento
 - Guardado de prompts por asistente.
@@ -33,23 +32,17 @@ Incluye dashboard de asistentes, sistema de entrenamiento de prompts y simulaci�
 - Persistencia local por ID.
 
 ### 💬 Simulación de Chat
-- Conversaciones simuladas.
-- Indicador de escritura.
+- Conversaciones simuladas con respuestas dinámicas.
+- Indicador de escritura (*typing*).
 - Historial persistente por asistente.
-- Reset con confirmación.
+- Reinicio de conversación con confirmación.
 
 ---
 
-## 📂 Estructura
+## 📂 Estructura del proyecto
 
-app/
-├── (routes)/train/[id]/page.tsx # Página de entrenamiento
-├── features/
-│ ├── assistants/
-│ └── training/
-├── shared/components/
-├── hooks/
-└── types/
+
+![Project structure](./public/readme/tree.png)
 
 
 ---
@@ -62,63 +55,57 @@ cd funnelhot-pruebaTecnica
 pnpm install
 pnpm dev
 
-Abrir en navegador:
+
 http://localhost:3000
 
 
-Hooks Principales
+🔑 Hooks principales
 
-| Hook               | Descripción                        |
-| ------------------ | ---------------------------------- |
-| `useAssistants`    | CRUD, búsqueda, paginación, toasts |
-| `useTraining`      | Manejo de prompts por asistente    |
-| `useSimulatedChat` | Chat simulado y persistente        |
+| Hook               | Descripción                                 |
+| ------------------ | ------------------------------------------- |
+| `useAssistants`    | CRUD, búsqueda, paginación y notificaciones |
+| `useTraining`      | Manejo de prompts por asistente             |
+| `useSimulatedChat` | Chat simulado y persistente                 |
 
 
-Buenas Prácticas
 
-Modularización por feature.
+📦 Dependencias destacadas
 
-Separación lógica / UI.
+next – Framework React SSR/SSG
+
+react – Biblioteca de interfaz de usuario
+
+lucide-react – Iconos modernos y ligeros
+
+tailwindcss – Estilos utilitarios
+
+
+Buenas prácticas
+
+Modularización por features.
+
+Separación clara entre lógica y presentación.
 
 Persistencia local por entidad.
 
 Componentes reutilizables.
 
-UI responsive.
+UI totalmente responsive.
 
 
 🧪 Flujo de uso
 
-Crear asistente.
+Crear un asistente.
 
-Entrenar con prompts.
+Entrenarlo con prompts.
 
 Simular conversación.
 
 Reiniciar cuando sea necesario.
 
+🛜 Despliegue
 
-
-🛜 Deploy
-
-Recomendado en Vercel:
+Recomendado con Vercel:
 
 https://funnelhotassitant.vercel.app
 
-
----
-
-### 📌 ¿Cómo usarlo?
-
-1. Entra a tu repo.
-2. Abre el archivo `README.md`.
-3. Borra el contenido.
-4. Pega este bloque.
-5. Guarda cambios.
-
-GitHub lo renderiza automáticamente con diseño profesional.
-
----
-
-Esto es exactamente el formato que usan repos grandes y empresas.
