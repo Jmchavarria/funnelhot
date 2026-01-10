@@ -32,12 +32,13 @@ export const PaginationFooter: React.FC<Props> = ({
       </div>
 
       {/* Controls */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
+      <div className="flex flex-row items-center justify-between gap-2 sm:justify-start">
+
         <button
           onClick={onPrev}
           disabled={currentPage === 1}
           className="
-            w-full sm:w-auto
+            w-auto sm:w-auto
             px-4 py-2
             bg-white border border-gray-200 rounded-lg
             text-sm
@@ -57,7 +58,7 @@ export const PaginationFooter: React.FC<Props> = ({
           onClick={onNext}
           disabled={currentPage === totalPages}
           className="
-            w-full sm:w-auto
+            w-auto sm:w-auto
             px-4 py-2
             bg-white border border-gray-200 rounded-lg
             text-sm

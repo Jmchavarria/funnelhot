@@ -59,11 +59,8 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
   return (
     <div className="bg-gray-50 w-full">
       {/* Contenedor: full width en mobile, centrado y limitado en desktop */}
-      <div className="w-full ">
-
-        {/* Espaciado vertical */}
-        <div className=" ">
-          {/* Header */}
+      <div className="w-full px-3 sm:px-0">
+        <div className="w-full max-w-4xl mx-auto">
           <TableHeader
             title={title}
             hasItems={assistants.length > 0}
@@ -102,6 +99,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           />
         </div>
       </div>
+
 
       {/* Floating menu */}
       <AssistantMenu
