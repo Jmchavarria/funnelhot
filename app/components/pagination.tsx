@@ -17,34 +17,53 @@ export const PaginationFooter: React.FC<Props> = ({
   totalItems,
   itemsPerPage,
   onPrev,
-  onNext
+  onNext,
 }) => {
   const start = (currentPage - 1) * itemsPerPage + 1;
   const end = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="mt-6 flex items-center justify-between">
-      <div className="text-sm text-gray-600">
-        Mostrando {start} a {end} de {totalItems} resultados
+    <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Info */}
+      <div className="text-sm text-gray-600 text-center sm:text-left">
+        Mostrando <span className="font-medium">{start}</span> a{' '}
+        <span className="font-medium">{end}</span> de{' '}
+        <span className="font-medium">{totalItems}</span> resultados
       </div>
 
-      <div className="flex gap-2">
+      {/* Controls */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:gap-2">
         <button
           onClick={onPrev}
           disabled={currentPage === 1}
-          className="px-4 py-2 bg-white border border-gray-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+          className="
+            w-full sm:w-auto
+            px-4 py-2
+            bg-white border border-gray-200 rounded-lg
+            text-sm
+            disabled:opacity-50 disabled:cursor-not-allowed
+            hover:bg-gray-50 transition
+          "
         >
           Anterior
         </button>
 
-        <span className="px-4 py-2 text-sm text-gray-600">
-          Página {currentPage} de {totalPages}
+        <span className="px-4 py-2 text-sm text-gray-600 text-center">
+          Página <span className="font-medium">{currentPage}</span> de{' '}
+          <span className="font-medium">{totalPages}</span>
         </span>
 
         <button
           onClick={onNext}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-white border border-gray-200 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition"
+          className="
+            w-full sm:w-auto
+            px-4 py-2
+            bg-white border border-gray-200 rounded-lg
+            text-sm
+            disabled:opacity-50 disabled:cursor-not-allowed
+            hover:bg-gray-50 transition
+          "
         >
           Siguiente
         </button>
