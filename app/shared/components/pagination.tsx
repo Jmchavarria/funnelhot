@@ -25,14 +25,16 @@ export const PaginationFooter: React.FC<Props> = ({
   return (
     <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       {/* Info */}
-      <div className="text-sm text-gray-600 text-center sm:text-left">
+      <div className="hidden sm:block text-sm text-gray-600 text-center sm:text-left">
+
         Showing <span className="font-medium">{start}</span> to{' '}
         <span className="font-medium">{end}</span> of{' '}
         <span className="font-medium">{totalItems}</span> results
       </div>
 
       {/* Controls */}
-      <div className="flex flex-row items-center justify-between gap-2 sm:justify-start">
+      <div className="flex flex-row items-center justify-between gap-1  sm:justify-start">
+
         <button
           onClick={onPrev}
           disabled={currentPage === 1}

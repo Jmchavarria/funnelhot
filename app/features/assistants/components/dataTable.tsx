@@ -7,12 +7,7 @@ import { useRouter } from 'next/navigation';
 import { NewAssistantModal } from './assistants/newAssistantModal/newAssistantModal';
 import { PaginationFooter } from '@/app/shared/components/pagination';
 import { DataTableProps } from '@/app/types';
-
-// ⚠️ IMPORT CON ESPACIOS: esto te puede romper el build.
-// ✅ Debe ser un path real SIN dobles espacios en el nombre de carpeta.
-// Ej: './assistants/AssistantCard/AssistantCard'
 import { AssistantCard } from './assistants/AssistantCard/AssistantCard';
-
 import { TableHeader } from './tableHeader';
 import { useAssistants } from '../hooks/useAssistants';
 import { useFloatingMenu } from '@/app/hooks/useFloatingMenu';
@@ -30,21 +25,10 @@ type ToastState = {
 
 export const DataTable: React.FC<DataTableProps> = ({ title }) => {
   const router = useRouter();
-
-  // Cambiar esto afecta: paginación, index global, y cálculo de totalPages.
   const itemsPerPage = 3;
 
   const [search, setSearch] = useState('');
 
-  /**
-   * useAssistants es tu "source of truth" para la data de assistants:
-   * - carga/persistencia
-   * - sorting base
-   * - paginación base (currentPage)
-   * - CRUD
-   * - modal de create/edit
-   * - lastAction para toasts
-   */
   const {
     assistants,
     currentPage,
@@ -62,13 +46,6 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     clearLastAction,
   } = useAssistants(itemsPerPage);
 
-  /**
-   * Maneja el menú flotante "..." en desktop:
-   * - openMenuRow: índice del item que tiene menú abierto
-   * - menuPosition: coords (top/left) calculadas con el button ref
-   * - dropdownRef: para cerrar cuando haces click afuera
-   * - buttonRefs: para saber dónde está el botón de cada fila
-   */
   const {
     openMenuRow,
     menuPosition,
@@ -78,19 +55,12 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     closeMenu,
   } = useFloatingMenu();
 
-  /* ---------------- Toast ---------------- */
-
-  // El toast se controla por un estado local. lastAction solo dispara el evento.
   const [toast, setToast] = useState<ToastState>({
     open: false,
     title: '',
     kind: 'success',
   });
 
-  /**
-   * Este efecto convierte "eventos" (lastAction) en UI (toast).
-   * Importante: luego llama clearLastAction() para que NO se repita al re-render.
-   */
   useEffect(() => {
     if (!lastAction) return;
 
@@ -108,6 +78,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           return '';
       }
     })();
+
     setToast({
       open: true,
       title,
@@ -117,8 +88,6 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           : 'success',
     });
 
-
-    // Auto-close del toast
     const t = setTimeout(() => {
       setToast((p) => ({ ...p, open: false }));
     }, 2200);
@@ -127,35 +96,10 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     return () => clearTimeout(t);
   }, [lastAction, clearLastAction]);
 
-  /**
-   * Estilos derivados del tipo de toast.
-   * useMemo evita recrear objetos (no es crítico, pero es limpio).
-   */
-  const toastStyles = useMemo(() => {
-    return toast.kind === 'danger'
-      ? {
-        wrap: 'bg-red-600/95 text-white border border-red-700',
-        dot: 'bg-red-500',
-      }
-      : {
-        wrap: 'bg-emerald-600/95 text-white border border-emerald-700',
-        dot: 'bg-emerald-500',
-      };
-  }, [toast.kind]);
-
-
-  /* ---------------- Search + Filter ---------------- */
-
-  /**
-   * Filtra sobre sortedData (ya viene ordenado del hook).
-   * OJO: Esto cambia el tamaño del dataset y por eso recalculamos paginación (totalPages/paginatedData).
-   */
   const filteredData = useMemo(() => {
     if (!search.trim()) return sortedData;
-
     const q = search.toLowerCase();
 
-    // Se filtran campos relevantes y se hace un includes()
     return sortedData.filter((a: any) =>
       [a.name, a.id, a.language, a.personality, a.tone]
         .filter(Boolean)
@@ -163,71 +107,39 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     );
   }, [sortedData, search]);
 
-  /**
-   * UX: cuando cambias el search, vuelves a page=1.
-   * Evita escenarios tipo: estabas en page 3 y con filtro solo queda 1 página.
-   */
   useEffect(() => {
     setCurrentPage(1);
   }, [search, setCurrentPage]);
 
-  // totalPages depende del dataset filtrado
   const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
 
-  /**
-   * Cortamos el array filtrado para mostrar solo la página actual.
-   */
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredData.slice(start, start + itemsPerPage);
   }, [filteredData, currentPage]);
 
-  /* ---------------- Actions ---------------- */
-
-  /**
-   * Convierte índice de la página (0..itemsPerPage-1) a índice global.
-   * Esto solo es válido si estás operando sobre el dataset global NO filtrado.
-   */
   const toGlobalIndex = (indexInPage: number) =>
     (currentPage - 1) * itemsPerPage + indexInPage;
 
-  /**
-   * Abre el modal en modo edición usando index global,
-   * y cierra el menú flotante (si está abierto).
-   */
-  const handleEdit = (indexInPage: number) => {
-    openEditModal(toGlobalIndex(indexInPage));
+  const handleEdit = (index: number) => {
+    openEditModal(toGlobalIndex(index));
     closeMenu();
   };
 
-  /**
-   * Borra por index global y cierra menú flotante.
-   */
-  const handleDelete = (indexInPage: number) => {
-    deleteAssistant(toGlobalIndex(indexInPage));
+  const handleDelete = (index: number) => {
+    deleteAssistant(toGlobalIndex(index));
     closeMenu();
   };
 
-  /**
-   * ⚠️ POSIBLE BUG:
-   * Estás usando filteredData[toGlobalIndex(index)].
-   * Cuando hay filtro, el "índice global" ya no coincide con el array filtrado.
-   *
-   * ✅ Solución recomendada: usar directamente item.id desde el map
-   * (te lo dejo comentado abajo).
-   */
-  const handleTrain = (indexInPage: number) => {
-    const assistant = filteredData[toGlobalIndex(indexInPage)];
+  const handleTrain = (index: number) => {
+    const assistant = filteredData[toGlobalIndex(index)];
     if (!assistant?.id) return;
-
     router.push(`/train/${assistant.id}`);
     closeMenu();
   };
 
-  /* ---------------- Render ---------------- */
-
   return (
-    <div className="bg-gray-50 w-full">
+    <div className="bg-gray-50 w-full pb-16 sm:pb-0">
       <div className="w-full px-3 sm:px-0">
         <div className="w-full max-w-4xl mx-auto">
           <TableHeader
@@ -245,36 +157,20 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           />
 
           <div className="space-y-4">
-            {paginatedData.length > 0 ? (
-              paginatedData.map((item, indexInPage) => (
-                <AssistantCard
-                  key={item.id || indexInPage}
-                  item={item}
-                  index={indexInPage}
-                  /**
-                   * Guardamos la ref del botón "..." por índice de página.
-                   * Esto se usa para posicionar el dropdown.
-                   */
-                  setButtonRef={(i, el) => {
-                    buttonRefs.current[i] = el;
-                  }}
-                  onMenuToggle={(i) => toggleMenu(i)}
-                  onEdit={() => handleEdit(indexInPage)}
-                  onDelete={() => handleDelete(indexInPage)}
-                  onTrain={() => handleTrain(indexInPage)}
-
-                /**
-                 * ✅ Mejor alternativa (sin bug):
-                 * onTrain={() => item?.id && router.push(`/train/${item.id}`)}
-                 * (así no dependes de indices globales con filtros)
-                 */
-                />
-              ))
-            ) : (
-              <div className="text-center py-12 bg-white rounded-2xl">
-                <p className="text-gray-500">No results found</p>
-              </div>
-            )}
+            {paginatedData.map((item, index) => (
+              <AssistantCard
+                key={item.id || index}
+                item={item}
+                index={index}
+                setButtonRef={(i, el) => {
+                  buttonRefs.current[i] = el;
+                }}
+                onMenuToggle={(i) => toggleMenu(i)}
+                onEdit={() => handleEdit(index)}
+                onDelete={() => handleDelete(index)}
+                onTrain={() => handleTrain(index)}
+              />
+            ))}
           </div>
 
           <PaginationFooter
@@ -288,7 +184,6 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
         </div>
       </div>
 
-      {/* Menú flotante: usa openMenuRow (índice de página) y coords calculadas */}
       <AssistantMenu
         open={openMenuRow !== null}
         top={menuPosition.top}
@@ -303,16 +198,13 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
         open={isModalOpen}
         onClose={closeModal}
         onSubmit={upsertAssistant}
-        /**
-         * initialData se usa para "editar": tomas el índice del hook (global),
-         * no el índice de la página.
-         */
         initialData={
-          editingAssistantIndex !== null ? assistants[editingAssistantIndex] : undefined
+          editingAssistantIndex !== null
+            ? assistants[editingAssistantIndex]
+            : undefined
         }
       />
 
-      {/* Toast simple: solo muestra feedback visual de acciones */}
       <Toast
         open={toast.open}
         title={toast.title}
@@ -320,7 +212,6 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
         onClose={() => setToast((p) => ({ ...p, open: false }))}
       />
 
-      {/* FAB móvil: acceso rápido a "New Assistant" */}
       <button
         type="button"
         onClick={openCreateModal}
