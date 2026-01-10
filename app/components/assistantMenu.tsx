@@ -8,6 +8,8 @@ type Props = {
   top: number;
   left: number;
   menuRef: React.RefObject<HTMLDivElement | null>;
+
+
   onEdit: () => void;
   onDelete: () => void;
   onTrain: () => void;
