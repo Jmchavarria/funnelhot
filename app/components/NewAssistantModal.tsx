@@ -156,20 +156,20 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
     onClose();
   };
 
- const handleClose = () => {
-  if (isEditMode) {
-    setForm(DEFAULT_FORM);
-    setStep(1);
-  } else {
-    // si NO quieres persistir cuando cancelas:
-    localStorage.removeItem(STORAGE_KEY_FORM);
-    localStorage.removeItem(STORAGE_KEY_STEP);
-    setForm(DEFAULT_FORM);
-    setStep(1);
-  }
+  const handleClose = () => {
+    if (isEditMode) {
+      setForm(DEFAULT_FORM);
+      setStep(1);
+    } else {
+      // si NO quieres persistir cuando cancelas:
+      localStorage.removeItem(STORAGE_KEY_FORM);
+      localStorage.removeItem(STORAGE_KEY_STEP);
+      setForm(DEFAULT_FORM);
+      setStep(1);
+    }
 
-  onClose();
-};
+    onClose();
+  };
 
 
   // ✅ UN SOLO RETURN CONDICIONAL, AL FINAL DE LOS HOOKS
@@ -194,8 +194,8 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
                   ? 'Edit Assistant'
                   : 'Edit Response Configuration'
                 : step === 1
-                ? 'New Assistant'
-                : 'Response Configuration'}
+                  ? 'New Assistant'
+                  : 'Response Configuration'}
             </h3>
 
             <X
@@ -210,17 +210,15 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
         {/* Step indicator */}
         <div className="flex items-center mb-8">
           <div
-            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
-              step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
-            }`}
+            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
+              }`}
           >
             1
           </div>
           <div className="flex-1 h-px bg-gray-300 mx-3" />
           <div
-            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
-              step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
-            }`}
+            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
+              }`}
           >
             2
           </div>
@@ -265,10 +263,10 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
                 onChange={(e) => setForm({ ...form, tone: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg"
               >
+                <option>Formal</option>
+                <option>Casual</option>
                 <option>Professional</option>
-                <option>Friendly</option>
-                <option>Technical</option>
-                <option>Sales-oriented</option>
+                <option>friendly</option>
               </select>
             </div>
           </div>
@@ -300,9 +298,8 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
               ))}
 
               <p
-                className={`text-sm ${
-                  isStep2Valid ? 'text-green-600' : 'text-red-500'
-                }`}
+                className={`text-sm ${isStep2Valid ? 'text-green-600' : 'text-red-500'
+                  }`}
               >
                 Total: {totalResponses}%
               </p>

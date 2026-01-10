@@ -13,6 +13,8 @@ import {
   Trash,
   X,
   Check,
+  Globe,
+  Sparkles,
 } from 'lucide-react';
 
 type Assistant = any;
@@ -99,12 +101,13 @@ function MobileAssistantRow({
 
             <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-gray-500">
               <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border border-gray-100 px-2 py-0.5">
-                <Hash className="w-3.5 h-3.5" />
-                <span className="truncate max-w-[160px]">{item.id}</span>
+                <Globe className="w-3.5 h-3.5" />
+                <span className="truncate max-w-[160px]">{item.language}</span>
               </span>
 
               {item.personality && (
-                <span className="inline-flex items-center rounded-full bg-gray-50 border border-gray-100 px-2 py-0.5 truncate max-w-[180px]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 border border-gray-100 px-2 py-0.5 truncate max-w-[180px]">
+                  <Sparkles className="w-3.5 h-3.5"/>
                   {item.personality}
                 </span>
               )}
