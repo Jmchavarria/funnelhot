@@ -26,19 +26,17 @@ export const PaginationFooter: React.FC<Props> = ({
     <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       {/* Info */}
       <div className="text-sm text-gray-600 text-center sm:text-left">
-        Mostrando <span className="font-medium">{start}</span> a{' '}
-        <span className="font-medium">{end}</span> de{' '}
-        <span className="font-medium">{totalItems}</span> resultados
+        Showing <span className="font-medium">{start}</span> to{' '}
+        <span className="font-medium">{end}</span> of{' '}
+        <span className="font-medium">{totalItems}</span> results
       </div>
 
       {/* Controls */}
       <div className="flex flex-row items-center justify-between gap-2 sm:justify-start">
-
         <button
           onClick={onPrev}
           disabled={currentPage === 1}
           className="
-            w-auto sm:w-auto
             px-4 py-2
             bg-white border border-gray-200 rounded-lg
             text-sm
@@ -46,11 +44,11 @@ export const PaginationFooter: React.FC<Props> = ({
             hover:bg-gray-50 transition
           "
         >
-          Anterior
+          Previous
         </button>
 
         <span className="px-4 py-2 text-sm text-gray-600 text-center">
-          Página <span className="font-medium">{currentPage}</span> de{' '}
+          Page <span className="font-medium">{currentPage}</span> of{' '}
           <span className="font-medium">{totalPages}</span>
         </span>
 
@@ -58,7 +56,6 @@ export const PaginationFooter: React.FC<Props> = ({
           onClick={onNext}
           disabled={currentPage === totalPages}
           className="
-            w-auto sm:w-auto
             px-4 py-2
             bg-white border border-gray-200 rounded-lg
             text-sm
@@ -66,7 +63,7 @@ export const PaginationFooter: React.FC<Props> = ({
             hover:bg-gray-50 transition
           "
         >
-          Siguiente
+          Next
         </button>
       </div>
     </div>

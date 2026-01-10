@@ -4,7 +4,7 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { NewAssistantModal } from './NewAssistantModal';
+import { NewAssistantModal } from './newAssistantModal';
 import { PaginationFooter } from './pagination';
 import { DataTableProps } from '../types';
 import { AssistantCard } from './assistantCard';
