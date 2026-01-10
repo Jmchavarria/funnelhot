@@ -37,6 +37,7 @@ export const PaginationFooter: React.FC<Props> = ({
           onClick={onPrev}
           disabled={currentPage === 1}
           className="
+          cursor-pointer
             px-4 py-2
             bg-white border border-gray-200 rounded-lg
             text-sm
@@ -56,6 +57,7 @@ export const PaginationFooter: React.FC<Props> = ({
           onClick={onNext}
           disabled={currentPage === totalPages}
           className="
+          cursor-pointer
             px-4 py-2
             bg-white border border-gray-200 rounded-lg
             text-sm
