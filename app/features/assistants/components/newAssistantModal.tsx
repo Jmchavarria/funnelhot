@@ -387,7 +387,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
             <button
               disabled={!isStep2Valid}
               onClick={handleSubmit}
-              className="px-4 py-2 rounded-lg bg-gray-900 text-white disabled:opacity-40"
+              className="cursor-pointer px-4 py-2 rounded-lg bg-gray-900 text-white disabled:opacity-40"
             >
               {isEditMode ? 'Save changes' : 'Create assistant'}
             </button>

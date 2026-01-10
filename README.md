@@ -7,6 +7,63 @@ Incluye dashboard de asistentes, sistema de entrenamiento de prompts y simulaci�
 
 ---
 
+
+---
+
+## 🧩 Características implementadas
+
+- Dashboard de asistentes con CRUD completo.
+- Sistema de búsqueda y paginación.
+- Menú flotante contextual por asistente.
+- Entrenamiento de prompts por asistente con persistencia local.
+- Simulación de chat con historial independiente por asistente.
+- Indicador visual de escritura (*typing*).
+- Toasts de notificación para acciones.
+- UI responsive (mobile / desktop).
+- Persistencia de datos mediante `localStorage`.
+
+---
+
+## ⏳ Si tuve que priorizar, dejé fuera
+
+- Integración con un backend real o API externa.  
+  ➜ Se utilizó `localStorage` para simular persistencia sin depender de infraestructura.
+
+- Conexión a un modelo de IA real (OpenAI, etc.).  
+  ➜ El chat se simula con respuestas aleatorias para demostrar el flujo completo de entrenamiento + conversación.
+
+- Autenticación de usuarios.  
+  ➜ No era requerida para validar la arquitectura ni el comportamiento principal del sistema.
+
+---
+
+## ⚙️ Decisiones técnicas
+
+| Decisión | Motivo |
+|--------|--------|
+| Next.js App Router | Estructura moderna y escalable. |
+| Hooks personalizados (`useAssistants`, `useTraining`, `useSimulatedChat`) | Separación clara de lógica y UI. |
+| Persistencia en `localStorage` | Mantener el proyecto 100% funcional sin backend. |
+| Modularización por features | Facilita mantenimiento y lectura del código. |
+| Tailwind CSS | Velocidad de desarrollo y diseño consistente. |
+| Tipado fuerte con TypeScript | Menos errores y mayor claridad en la arquitectura. |
+
+---
+
+## 🕒 Tiempo aproximado de dedicación
+
+| Tarea | Tiempo |
+|------|--------|
+| Arquitectura inicial | 1 h |
+| Dashboard y CRUD de asistentes | 2 h |
+| Entrenamiento de prompts | 1 h |
+| Simulación de chat | 1 h |
+| Modularización y refactor | 1.5 h |
+| Documentación y README | 0.5 h |
+
+**Total aproximado:** **7 horas**
+
+
 ## 🚀 Tecnologías
 
 - **Next.js (App Router)**
