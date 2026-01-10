@@ -138,6 +138,11 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     closeMenu();
   };
 
+  // ✅ Empty states
+  const hasAnyAssistants = assistants.length > 0;
+  const hasSearch = !!search.trim();
+  const isEmpty = paginatedData.length === 0;
+
   return (
     <div className="bg-gray-50 w-full pb-16 sm:pb-0">
       <div className="w-full px-3 sm:px-0">
@@ -157,30 +162,70 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           />
 
           <div className="space-y-4">
-            {paginatedData.map((item, index) => (
-              <AssistantCard
-                key={item.id || index}
-                item={item}
-                index={index}
-                setButtonRef={(i, el) => {
-                  buttonRefs.current[i] = el;
-                }}
-                onMenuToggle={(i) => toggleMenu(i)}
-                onEdit={() => handleEdit(index)}
-                onDelete={() => handleDelete(index)}
-                onTrain={() => handleTrain(index)}
-              />
-            ))}
+            {!isEmpty ? (
+              paginatedData.map((item, index) => (
+                <AssistantCard
+                  key={item.id || index}
+                  item={item}
+                  index={index}
+                  setButtonRef={(i, el) => {
+                    buttonRefs.current[i] = el;
+                  }}
+                  onMenuToggle={(i) => toggleMenu(i)}
+                  onEdit={() => handleEdit(index)}
+                  onDelete={() => handleDelete(index)}
+                  onTrain={() => handleTrain(index)}
+                />
+              ))
+            ) : (
+              <div className="text-center py-12 bg-white rounded-2xl border border-gray-100">
+                {!hasAnyAssistants ? (
+                  <>
+                    <p className="text-gray-900 font-semibold">No assistants yet</p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      Create your first assistant to start training and chatting.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={openCreateModal}
+                      className="mt-4 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gray-900 text-white font-semibold hover:bg-gray-800 active:scale-[0.98]"
+                    >
+                      <Plus className="w-4 h-4" />
+                      New Assistant
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-gray-900 font-semibold">No results found</p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      Try a different search term.
+                    </p>
+                    {hasSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setSearch('')}
+                        className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-xl bg-gray-100 text-gray-900 font-semibold hover:bg-gray-200 active:scale-[0.98]"
+                      >
+                        Clear search
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
-          <PaginationFooter
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={filteredData.length}
-            itemsPerPage={itemsPerPage}
-            onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-          />
+          {/* ✅ Solo mostrar paginación si hay algo que paginar */}
+          {filteredData.length > 0 && (
+            <PaginationFooter
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredData.length}
+              itemsPerPage={itemsPerPage}
+              onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            />
+          )}
         </div>
       </div>
 
