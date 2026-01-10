@@ -25,6 +25,9 @@ const DEFAULT_FORM = {
   audioEnabled: false,
 };
 
+const MIN_NAME = 3;
+const MAX_NAME = 40;
+
 export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
   open,
   onClose,
@@ -39,6 +42,9 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
   const [step, setStep] = useState<Step>(1);
   const [form, setForm] = useState(() => DEFAULT_FORM);
 
+  // ✅ realtime name validation state
+  const [nameTouched, setNameTouched] = useState(false);
+
   // -----------------------------
   // SCROLL LOCK (BODY)
   // -----------------------------
@@ -46,16 +52,14 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
     if (!open) return;
 
     const scrollY = window.scrollY;
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
     document.body.style.left = '0';
     document.body.style.right = '0';
     document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight =
-      scrollbarWidth > 0 ? `${scrollbarWidth}px` : '';
+    document.body.style.paddingRight = scrollbarWidth > 0 ? `${scrollbarWidth}px` : '';
 
     return () => {
       document.body.style.position = '';
@@ -73,6 +77,8 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
   // -----------------------------
   useEffect(() => {
     if (!open) return;
+
+    setNameTouched(false);
 
     if (isEditMode) {
       setStep(1);
@@ -126,13 +132,21 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
   // -----------------------------
   // VALIDATIONS
   // -----------------------------
-  const totalResponses = useMemo(
-    () => form.short + form.medium + form.long,
-    [form.short, form.medium, form.long]
-  );
+  const totalResponses = useMemo(() => form.short + form.medium + form.long, [form.short, form.medium, form.long]);
+
+  // ✅ normalize checks
+  const nameTrimmed = form.name.trim();
+  const nameLength = nameTrimmed.length;
+
+  const nameError = useMemo(() => {
+    if (!nameTrimmed) return `Assistant name is required.`;
+    if (nameLength < MIN_NAME) return `Name must be at least ${MIN_NAME} characters.`;
+    if (nameLength > MAX_NAME) return `Name must be at most ${MAX_NAME} characters.`;
+    return '';
+  }, [nameTrimmed, nameLength]);
 
   const isStep1Valid =
-    form.name.trim().length > 0 &&
+    !nameError &&
     form.language.length > 0 &&
     form.tone.length > 0;
 
@@ -153,6 +167,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
 
     setForm(DEFAULT_FORM);
     setStep(1);
+    setNameTouched(false);
     onClose();
   };
 
@@ -160,28 +175,41 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
     if (isEditMode) {
       setForm(DEFAULT_FORM);
       setStep(1);
+      setNameTouched(false);
     } else {
-      // si NO quieres persistir cuando cancelas:
       localStorage.removeItem(STORAGE_KEY_FORM);
       localStorage.removeItem(STORAGE_KEY_STEP);
       setForm(DEFAULT_FORM);
       setStep(1);
+      setNameTouched(false);
     }
 
     onClose();
   };
 
+  const handleNameChange = (value: string) => {
+    // ✅ no leading spaces, collapse excessive spaces
+    const cleaned = value.replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
+    setForm({ ...form, name: cleaned });
+    if (!nameTouched) setNameTouched(true);
+  };
+
+  const handleNext = () => {
+    // ✅ force showing error if they try to continue
+    setNameTouched(true);
+    if (!isStep1Valid) return;
+    setStep(2);
+  };
 
   // ✅ UN SOLO RETURN CONDICIONAL, AL FINAL DE LOS HOOKS
   if (!open) return null;
 
+  const showNameError = nameTouched && !!nameError;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={handleClose}
-      />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
 
       {/* Modal (scrolleable) */}
       <div className="relative bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 z-10 max-h-[85vh] overflow-y-auto">
@@ -194,8 +222,8 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
                   ? 'Edit Assistant'
                   : 'Edit Response Configuration'
                 : step === 1
-                  ? 'New Assistant'
-                  : 'Response Configuration'}
+                ? 'New Assistant'
+                : 'Response Configuration'}
             </h3>
 
             <X
@@ -210,15 +238,17 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
         {/* Step indicator */}
         <div className="flex items-center mb-8">
           <div
-            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
-              }`}
+            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
+              step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
+            }`}
           >
             1
           </div>
           <div className="flex-1 h-px bg-gray-300 mx-3" />
           <div
-            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
-              }`}
+            className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
+              step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
+            }`}
           >
             2
           </div>
@@ -228,15 +258,37 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
         {step === 1 && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Assistant name
-              </label>
+              <div className="flex items-end justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Assistant name
+                </label>
+                <span className={`text-xs ${nameLength > MAX_NAME ? 'text-red-600' : 'text-gray-400'}`}>
+                  {nameLength}/{MAX_NAME}
+                </span>
+              </div>
+
               <input
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-200 rounded-lg"
+                onChange={(e) => handleNameChange(e.target.value)}
+                onBlur={() => setNameTouched(true)}
+                className={[
+                  'w-full px-4 py-2 rounded-lg transition',
+                  'border',
+                  showNameError ? 'border-red-300 focus:outline-none focus:ring-2 focus:ring-red-200' : 'border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-200',
+                ].join(' ')}
                 placeholder="e.g. Sales Assistant"
+                maxLength={MAX_NAME + 20} // allow typing a bit beyond to show error nicely
               />
+
+              {showNameError && (
+                <p className="mt-1 text-xs text-red-600">{nameError}</p>
+              )}
+
+              {!showNameError && (
+                <p className="mt-1 text-xs text-gray-400">
+                  Use a short, clear name (min {MIN_NAME} chars).
+                </p>
+              )}
             </div>
 
             <div>
@@ -266,7 +318,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
                 <option>Formal</option>
                 <option>Casual</option>
                 <option>Professional</option>
-                <option>friendly</option>
+                <option>Friendly</option>
               </select>
             </div>
           </div>
@@ -297,10 +349,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
                 </div>
               ))}
 
-              <p
-                className={`text-sm ${isStep2Valid ? 'text-green-600' : 'text-red-500'
-                  }`}
-              >
+              <p className={`text-sm ${isStep2Valid ? 'text-green-600' : 'text-red-500'}`}>
                 Total: {totalResponses}%
               </p>
             </div>
@@ -310,9 +359,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
               <input
                 type="checkbox"
                 checked={form.audioEnabled}
-                onChange={(e) =>
-                  setForm({ ...form, audioEnabled: e.target.checked })
-                }
+                onChange={(e) => setForm({ ...form, audioEnabled: e.target.checked })}
                 className="h-4 w-4"
               />
             </div>
@@ -331,7 +378,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
           {step === 1 ? (
             <button
               disabled={!isStep1Valid}
-              onClick={() => setStep(2)}
+              onClick={handleNext}
               className="px-4 cursor-pointer py-2 rounded-lg bg-gray-900 text-white disabled:opacity-40"
             >
               Next
