@@ -44,7 +44,7 @@ export function ChatPanel({
   const canSend = useMemo(() => currentMessage.trim().length > 0 && !isTyping, [currentMessage, isTyping]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col min-h-[520px] h-[calc(100vh-220px)]">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col min-h-130 h-[calc(100vh-220px)]">
       {/* Header fijo */}
       <div className="flex items-center justify-between px-4 py-3 border-b bg-white">
         <div className="flex items-center gap-2">
@@ -53,7 +53,7 @@ export function ChatPanel({
           </div>
           <div className="leading-tight">
             <p className="text-sm font-semibold text-gray-900">Chat</p>
-            <p className="text-xs text-gray-500 truncate max-w-[220px]">
+            <p className="text-xs text-gray-500 truncate max-w-55">
               {assistantName ? assistantName : 'Asistente'}
             </p>
           </div>
@@ -70,7 +70,7 @@ export function ChatPanel({
         className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-4 bg-gray-50"
       >
         {messages.length === 0 && !isTyping && (
-          <div className="h-full min-h-[200px] flex items-center justify-center text-sm text-gray-400">
+          <div className="h-full min-h-50 flex items-center justify-center text-sm text-gray-400">
             Escribe un mensaje para comenzar
           </div>
         )}
@@ -132,7 +132,7 @@ function MessageBubble({ m }: { m: Message }) {
     <div className={`w-full flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div className={`flex items-end gap-2 max-w-[92%] sm:max-w-[80%] ${isUser ? 'flex-row-reverse' : ''}`}>
         <div
-          className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center ${
+          className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center ${
             isUser ? 'bg-gray-300' : 'bg-gray-900'
           }`}
         >
@@ -150,7 +150,7 @@ function MessageBubble({ m }: { m: Message }) {
               : 'bg-white text-gray-900 border-gray-200 rounded-bl-md'
           }`}
         >
-          <p className="whitespace-pre-wrap break-words">{m.content}</p>
+          <p className="whitespace-pre-wrap wrap-break-word">{m.content}</p>
 
           <div className={`text-[10px] mt-1 text-right ${isUser ? 'text-gray-300' : 'text-gray-400'}`}>
             {new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -164,7 +164,7 @@ function MessageBubble({ m }: { m: Message }) {
 function TypingBubble() {
   return (
     <div className="flex items-end gap-2 max-w-[92%] sm:max-w-[80%]">
-      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center">
+      <div className="shrink-0 w-7 h-7 rounded-full bg-gray-900 flex items-center justify-center">
         <Bot className="w-4 h-4 text-white" />
       </div>
 

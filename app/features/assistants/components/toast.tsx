@@ -21,7 +21,7 @@ export function Toast({ open, title, message, onClose, durationMs = 2200 }: Prop
   if (!open) return null;
 
   return (
-    <div className="fixed z-[80] top-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-[360px]">
+    <div className="fixed z-80 top-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-90">
       <div className="flex items-start gap-3 rounded-2xl bg-green-600 px-4 py-3 shadow-xl text-white border border-green-700">
         <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-green-500 shrink-0">
           <CheckCircle2 className="w-5 h-5" />
