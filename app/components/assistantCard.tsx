@@ -26,7 +26,7 @@ export function AssistantCard({
   onMenuToggle,
 }: Props) {
   return (
-    <div className="relative bg-white rounded-xl border border-gray-100 shadow-sm transition-all p-3  ">
+    <div className="relative bg-white rounded-xl border border-gray-100 shadow-sm transition-all p-3 w-full max-w-4xl  ">
       {/* Header */}
       <div className=" pr-10">
         <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
@@ -97,11 +97,11 @@ function SystemsSection({ systems }: { systems?: any }) {
   return (
     <Section
       title="Systems"
-      className="lg:border-l lg:border-r lg:border-gray-100 lg:px-8"
+      className="lg:border-l lg:border-r  lg:border-gray-100 lg:px-8"
     >
-      <div className="space-y-3">
+      <div className="space-y-3 flex gap-10 items-center justify-center">
         <div>
-          <div className="flex items-center gap-2 text-green-600 font-medium text-sm">
+          <div className="flex items-center gap-2 text-green-600 fo nt-medium text-sm">
             <CheckCircle2 className="w-4 h-4" />
             {systems?.workStatus ?? '—'}
           </div>
