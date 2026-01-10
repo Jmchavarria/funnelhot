@@ -80,7 +80,11 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
                     buttonRefs.current[i] = el;
                   }}
                   onMenuToggle={(i) => toggleMenu(i)}
+                  onEdit={() => handleEdit(index)}
+                  onDelete={() => handleDelete(index)}
+                  onTrain={() => handleTrain(index)}
                 />
+
               ))
             ) : (
               <div className="text-center py-12 bg-white rounded-2xl">
