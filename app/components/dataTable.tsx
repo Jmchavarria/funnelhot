@@ -75,15 +75,18 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
         <div className="space-y-4">
           {paginatedData.length > 0 ? (
             paginatedData.map((item, index) => (
-              <AssistantCard
-                key={item.id || index}
-                item={item}
-                index={index}
-                setButtonRef={(i, el) => {
-                  buttonRefs.current[i] = el;
-                }}
-                onMenuToggle={(i) => toggleMenu(i)}
-              />
+             <AssistantCard
+                  key={item.id || index}
+                  item={item}
+                  index={index}
+                  setButtonRef={(i, el) => {
+                    buttonRefs.current[i] = el;
+                  }}
+                  onMenuToggle={(i) => toggleMenu(i)}
+                  onEdit={() => handleEdit(index)}
+                  onDelete={() => handleDelete(index)}
+                  onTrain={() => handleTrain(index)}
+                />
             ))
           ) : (
             <div className="text-center py-12 bg-white rounded-2xl">
