@@ -1,194 +1,124 @@
-📘 funnelhot-pruebaTecnica
+# 🧠 Funnelhot – Prueba Técnica
 
-Este es el repositorio de la prueba técnica desarrollada para Funnelhot, una plataforma enfocada en la gestión y entrenamiento de asistentes inteligentes. El proyecto implementa un dashboard de asistentes con funcionalidad de entrenamiento y simulación de chat usando Next.js y React. Incluye almacenamiento local, paginación, búsquedas, y una página para entrenar y conversar con un asistente simulado.
+Plataforma de gestión y entrenamiento de asistentes inteligentes desarrollada como prueba técnica para Funnelhot.
 
-🔗 Demo desplegada: https://funnelhotassitant.vercel.app
+Incluye dashboard de asistentes, sistema de entrenamiento de prompts y simulación de chat por asistente.
 
-🧠 Tecnologías principales
+🔗 **Demo:** https://funnelhotassitant.vercel.app
 
-Este proyecto está construido con:
+---
 
-Next.js (App Router, React 18+)
+## 🚀 Tecnologías
 
-TypeScript
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
+- localStorage
+- Hooks personalizados
+- lucide-react
 
-Tailwind CSS para estilos
+---
 
-localStorage para persistencia de datos
+## ✨ Funcionalidades
 
-Hooks personalizados para lógica modular
+### 📋 Gestión de Asistentes
+- Crear, editar y eliminar asistentes.
+- Búsqueda por nombre, idioma, personalidad e ID.
+- Paginación automática.
+- Menú flotante por asistente.
 
-lucide-react para iconografía
+### 🧠 Entrenamiento
+- Guardado de prompts por asistente.
+- Uso rápido con **Ctrl + Enter**.
+- Persistencia local por ID.
 
-Paginación, búsqueda, modales y menús flotantes
+### 💬 Simulación de Chat
+- Conversaciones simuladas.
+- Indicador de escritura.
+- Historial persistente por asistente.
+- Reset con confirmación.
 
-🚀 Características
-📌 Lista de asistentes
+---
 
-Crea, edita, elimina y borra todos los assistants.
+## 📂 Estructura
 
-Búsqueda por nombre, idioma, personalidad, ID.
+app/
+├── (routes)/train/[id]/page.tsx # Página de entrenamiento
+├── features/
+│ ├── assistants/
+│ └── training/
+├── shared/components/
+├── hooks/
+└── types/
 
-Paginación y ordenamiento.
 
-Menú contextual (dropdown) por asistente.
+---
 
-Toasts de notificación para acciones importantes.
+## ⚙️ Instalación
 
-💾 Entrenamiento de prompts
-
-Guarda prompts reutilizables por asistente.
-
-Usa Ctrl + Enter para guardar rápidamente.
-
-Persistencia local por asistente.
-
-💬 Simulación de chat
-
-Conversación simulada con respuestas aleatorias.
-
-Indicador de escritura (typing).
-
-Guardado de chats individual por asistente.
-
-Reset de conversación con confirmación.
-
-📂 Estructura de carpetas
-.
-├── app/
-│   ├── (routes)/train/[id]/page.tsx     # Página de entrenamiento/chat
-│   ├── features/
-│   │   ├── assistants/                  # CRUD y lista
-│   │   │   └── components/
-│   │   │       └── AssistantCard/
-│   │   ├── training/                    # Entrenamiento UI + hooks
-│   │       ├── components/
-│   │       └── hooks/
-│   ├── shared/
-│   │   └── components/                  # Componentes reutilizables
-├── hooks/                                # Floating menu, helpers
-├── types/                                # Tipos TypeScript
-├── next.config.ts
-├── tsconfig.json
-└── package.json
-
-📥 Instalación
-
-Clona el repositorio y ejecuta:
-
+```bash
 git clone https://github.com/Jmchavarria/funnelhot-pruebaTecnica.git
 cd funnelhot-pruebaTecnica
-pnpm install     # o npm/yarn install
-pnpm dev         # iniciar servidor de desarrollo
+pnpm install
+pnpm dev
 
-
-Abre tu navegador en:
-
+Abrir en navegador:
 http://localhost:3000
 
-🧩 Módulos y Hooks clave
-useAssistants
 
-Controla:
+Hooks Principales
 
-Lista de assistants
+| Hook               | Descripción                        |
+| ------------------ | ---------------------------------- |
+| `useAssistants`    | CRUD, búsqueda, paginación, toasts |
+| `useTraining`      | Manejo de prompts por asistente    |
+| `useSimulatedChat` | Chat simulado y persistente        |
 
-Search, sort, pagination
 
-CRUD (create, edit, delete)
+Buenas Prácticas
 
-Toast actions
+Modularización por feature.
 
-useTraining
+Separación lógica / UI.
 
-Encapsula:
+Persistencia local por entidad.
 
-Prompts por assistant
+Componentes reutilizables.
 
-Draft local
+UI responsive.
 
-Guardado persistente
 
-useSimulatedChat
+🧪 Flujo de uso
 
-Encapsula:
+Crear asistente.
 
-Chat por assistant
+Entrenar con prompts.
 
-Simulación de texto aleatorio
+Simular conversación.
 
-Guardado local + reset seguro
+Reiniciar cuando sea necesario.
 
-UI Modularizados
 
-AssistantHeader
 
-TrainingPanel
+🛜 Deploy
 
-ChatPanel
+Recomendado en Vercel:
 
-🛠 Conceptos implementados
-✨ Entrenamiento de prompts
+https://funnelhotassitant.vercel.app
 
-Los prompts se guardan localmente y pueden volver a usarse, lo que simula una “memoria de entrenamiento” por assistant.
 
-📁 Persistencia por assistant
+---
 
-Cada assistant tiene su propio:
+### 📌 ¿Cómo usarlo?
 
-Lista de prompts
+1. Entra a tu repo.
+2. Abre el archivo `README.md`.
+3. Borra el contenido.
+4. Pega este bloque.
+5. Guarda cambios.
 
-Draft de texto
+GitHub lo renderiza automáticamente con diseño profesional.
 
-Historial de chat
+---
 
-Todo se almacena en localStorage con claves únicas por ID.
-
-🧪 Flow principal de uso
-
-Dashboard: Ver todos los assistants, editarlos o borrarlos.
-
-Entrenar: Guardar prompts usando Ctrl + Enter o botón.
-
-Chat: Simular conversación y guardar el historial.
-
-Reset: Borrar conversación con confirmación.
-
-🎯 Buenas prácticas incluidas
-
-Separación de lógica usando Hooks personalizados
-
-UI modularizada en componentes independientes
-
-Persistencia y restauración de datos en localStorage
-
-Paginación y búsqueda eficientes
-
-Indicadores de interacción (typing, toasts)
-
-📦 Dependencias destacadas
-
-next – Framework React SSR/SSG
-
-react – Biblioteca UI
-
-lucide-react – Iconos modernos y ligeros
-
-tailwindcss – Estilos utilitarios
-
-🧠 Consideraciones y mejorables
-
-✅ Modularización de lógica y presentación
-✅ Reutilización de hooks y componentes
-⚠️ Chat simulado sin IA real
-⚠️ Integración futura con backend o IA externa
-
-🧾 Licencia
-
-Este repositorio es parte de una prueba técnica y no tiene licencia pública (por defecto).
-
-🛜 Despliegue
-
-Puedes desplegar fácilmente en Vercel (hosting recomendado para Next.js).
-La app demo está disponible aquí:
-🔗 https://funnelhotassitant.vercel.app
+Esto es exactamente el formato que usan repos grandes y empresas.
