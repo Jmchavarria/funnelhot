@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface NewAssistantModalProps {
   open: boolean;
@@ -32,76 +33,103 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
 }) => {
   const isEditMode = !!initialData;
 
-  /* -----------------------------
-   * STEP STATE (persisted)
-   * ----------------------------- */
+  // -----------------------------
+  // STATE
+  // -----------------------------
   const [step, setStep] = useState<Step>(1);
+  const [form, setForm] = useState(() => DEFAULT_FORM);
 
+  // -----------------------------
+  // SCROLL LOCK (BODY)
+  // -----------------------------
   useEffect(() => {
+    if (!open) return;
+
+    const scrollY = window.scrollY;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight =
+      scrollbarWidth > 0 ? `${scrollbarWidth}px` : '';
+
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+
+  // -----------------------------
+  // LOAD STEP + FORM WHEN OPEN
+  // -----------------------------
+  useEffect(() => {
+    if (!open) return;
+
     if (isEditMode) {
-      // En modo edición, ir directo al step 1
       setStep(1);
-    } else {
-      const storedStep = localStorage.getItem(STORAGE_KEY_STEP);
-      if (storedStep === '1' || storedStep === '2') {
-        setStep(Number(storedStep) as Step);
-      }
-    }
-  }, [isEditMode, open]);
-
-  useEffect(() => {
-    if (!isEditMode) {
-      localStorage.setItem(STORAGE_KEY_STEP, step.toString());
-    }
-  }, [step, isEditMode]);
-
-  /* -----------------------------
-   * FORM STATE (persisted or from initialData)
-   * ----------------------------- */
-  const [form, setForm] = useState(() => {
-    if (initialData) {
-      return {
-        name: initialData.name || '',
-        language: initialData.language || 'Spanish',
-        tone: initialData.tone || initialData.personality || 'Professional',
-        short: initialData.short || 30,
-        medium: initialData.medium || 40,
-        long: initialData.long || 30,
-        audioEnabled: initialData.audioEnabled || false,
-      };
-    }
-
-    if (typeof window === 'undefined') return DEFAULT_FORM;
-
-    const stored = localStorage.getItem(STORAGE_KEY_FORM);
-    return stored ? JSON.parse(stored) : DEFAULT_FORM;
-  });
-
-  // Actualizar form cuando cambia initialData
-  useEffect(() => {
-    if (initialData && open) {
       setForm({
-        name: initialData.name || '',
-        language: initialData.language || 'Spanish',
-        tone: initialData.tone || initialData.personality || 'Professional',
-        short: initialData.short || 30,
-        medium: initialData.medium || 40,
-        long: initialData.long || 30,
-        audioEnabled: initialData.audioEnabled || false,
+        name: initialData?.name || '',
+        language: initialData?.language || 'Spanish',
+        tone: initialData?.tone || initialData?.personality || 'Professional',
+        short: initialData?.short || 30,
+        medium: initialData?.medium || 40,
+        long: initialData?.long || 30,
+        audioEnabled: initialData?.audioEnabled || false,
       });
+      return;
     }
-  }, [initialData, open]);
+
+    // Create mode: recuperar de localStorage
+    const storedStep = localStorage.getItem(STORAGE_KEY_STEP);
+    if (storedStep === '1' || storedStep === '2') {
+      setStep(Number(storedStep) as Step);
+    } else {
+      setStep(1);
+    }
+
+    const storedForm = localStorage.getItem(STORAGE_KEY_FORM);
+    if (storedForm) {
+      try {
+        setForm(JSON.parse(storedForm));
+      } catch {
+        setForm(DEFAULT_FORM);
+      }
+    } else {
+      setForm(DEFAULT_FORM);
+    }
+  }, [open, isEditMode, initialData]);
+
+  // -----------------------------
+  // PERSIST (ONLY WHEN OPEN + CREATE MODE)
+  // -----------------------------
+  useEffect(() => {
+    if (!open) return;
+    if (isEditMode) return;
+    localStorage.setItem(STORAGE_KEY_STEP, step.toString());
+  }, [open, step, isEditMode]);
 
   useEffect(() => {
-    if (!isEditMode) {
-      localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(form));
-    }
-  }, [form, isEditMode]);
+    if (!open) return;
+    if (isEditMode) return;
+    localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(form));
+  }, [open, form, isEditMode]);
 
-  /* -----------------------------
-   * VALIDATIONS
-   * ----------------------------- */
-  const totalResponses = form.short + form.medium + form.long;
+  // -----------------------------
+  // VALIDATIONS
+  // -----------------------------
+  const totalResponses = useMemo(
+    () => form.short + form.medium + form.long,
+    [form.short, form.medium, form.long]
+  );
 
   const isStep1Valid =
     form.name.trim().length > 0 &&
@@ -110,36 +138,41 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
 
   const isStep2Valid = totalResponses === 100;
 
-  /* -----------------------------
-   * HANDLERS
-   * ----------------------------- */
+  // -----------------------------
+  // HANDLERS
+  // -----------------------------
   const handleSubmit = () => {
     if (!isStep2Valid) return;
 
-    // Enviar los datos del formulario
     onSubmit?.(form);
 
-    // Limpiar solo si no está en modo edición
     if (!isEditMode) {
       localStorage.removeItem(STORAGE_KEY_FORM);
       localStorage.removeItem(STORAGE_KEY_STEP);
     }
 
-    // Reset del formulario
     setForm(DEFAULT_FORM);
     setStep(1);
     onClose();
   };
 
-  const handleClose = () => {
-    // Si está en modo edición, resetear el formulario al cerrar
-    if (isEditMode) {
-      setForm(DEFAULT_FORM);
-      setStep(1);
-    }
-    onClose();
-  };
+ const handleClose = () => {
+  if (isEditMode) {
+    setForm(DEFAULT_FORM);
+    setStep(1);
+  } else {
+    // si NO quieres persistir cuando cancelas:
+    localStorage.removeItem(STORAGE_KEY_FORM);
+    localStorage.removeItem(STORAGE_KEY_STEP);
+    setForm(DEFAULT_FORM);
+    setStep(1);
+  }
 
+  onClose();
+};
+
+
+  // ✅ UN SOLO RETURN CONDICIONAL, AL FINAL DE LOS HOOKS
   if (!open) return null;
 
   return (
@@ -150,16 +183,27 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
         onClick={handleClose}
       />
 
-      {/* Modal */}
-      <div className="relative bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 z-10">
+      {/* Modal (scrolleable) */}
+      <div className="relative bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 z-10 max-h-[85vh] overflow-y-auto">
         {/* Header */}
         <div className="mb-6">
-          <h3 className="text-xl font-bold text-gray-900">
-            {isEditMode 
-              ? step === 1 ? 'Edit Assistant' : 'Edit Response Configuration'
-              : step === 1 ? 'New Assistant' : 'Response Configuration'
-            }
-          </h3>
+          <div className="flex justify-between">
+            <h3 className="text-xl font-bold text-gray-900">
+              {isEditMode
+                ? step === 1
+                  ? 'Edit Assistant'
+                  : 'Edit Response Configuration'
+                : step === 1
+                ? 'New Assistant'
+                : 'Response Configuration'}
+            </h3>
+
+            <X
+              className="cursor-pointer hover:text-gray-700 hover:scale-110 transition-all"
+              onClick={step === 1 ? handleClose : () => setStep(1)}
+            />
+          </div>
+
           <p className="text-sm text-gray-500">Step {step} of 2</p>
         </div>
 
@@ -167,9 +211,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
         <div className="flex items-center mb-8">
           <div
             className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
-              step === 1
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-200 text-gray-600'
+              step === 1 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
             }`}
           >
             1
@@ -177,9 +219,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
           <div className="flex-1 h-px bg-gray-300 mx-3" />
           <div
             className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
-              step === 2
-                ? 'bg-gray-900 text-white'
-                : 'bg-gray-200 text-gray-600'
+              step === 2 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-600'
             }`}
           >
             2
@@ -195,9 +235,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
               </label>
               <input
                 value={form.name}
-                onChange={(e) =>
-                  setForm({ ...form, name: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg"
                 placeholder="e.g. Sales Assistant"
               />
@@ -209,9 +247,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
               </label>
               <select
                 value={form.language}
-                onChange={(e) =>
-                  setForm({ ...form, language: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, language: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg"
               >
                 <option>Spanish</option>
@@ -226,9 +262,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
               </label>
               <select
                 value={form.tone}
-                onChange={(e) =>
-                  setForm({ ...form, tone: e.target.value })
-                }
+                onChange={(e) => setForm({ ...form, tone: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg"
               >
                 <option>Professional</option>
@@ -257,10 +291,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
                     max={100}
                     value={form[key]}
                     onChange={(e) =>
-                      setForm({
-                        ...form,
-                        [key]: Number(e.target.value),
-                      })
+                      setForm({ ...form, [key]: Number(e.target.value) })
                     }
                     className="w-24 px-3 py-2 border border-gray-200 rounded-lg"
                   />
@@ -278,17 +309,12 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">
-                Enable audio responses
-              </span>
+              <span className="text-sm text-gray-700">Enable audio responses</span>
               <input
                 type="checkbox"
                 checked={form.audioEnabled}
                 onChange={(e) =>
-                  setForm({
-                    ...form,
-                    audioEnabled: e.target.checked,
-                  })
+                  setForm({ ...form, audioEnabled: e.target.checked })
                 }
                 className="h-4 w-4"
               />
@@ -300,7 +326,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
         <div className="flex justify-between gap-3 pt-8">
           <button
             onClick={step === 1 ? handleClose : () => setStep(1)}
-            className="px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100"
+            className="px-4 cursor-pointer py-2 rounded-lg text-gray-600 hover:bg-gray-100"
           >
             {step === 1 ? 'Cancel' : 'Back'}
           </button>
@@ -309,7 +335,7 @@ export const NewAssistantModal: React.FC<NewAssistantModalProps> = ({
             <button
               disabled={!isStep1Valid}
               onClick={() => setStep(2)}
-              className="px-4 py-2 rounded-lg bg-gray-900 text-white disabled:opacity-40"
+              className="px-4 cursor-pointer py-2 rounded-lg bg-gray-900 text-white disabled:opacity-40"
             >
               Next
             </button>

@@ -56,11 +56,12 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     closeMenu();
   };
 
- return (
-  <div className="bg-gray-50 w-full">
-    {/* Contenedor: full width en mobile, centrado y limitado en desktop */}
-    <div className="w-full ">
+  return (
+    <div className="bg-gray-50 w-full">
+      {/* Contenedor: full width en mobile, centrado y limitado en desktop */}
+      <div className="w-full ">
 
+<<<<<<< HEAD
       {/* Espaciado vertical */}
       <div className=" ">
         {/* Header */}
@@ -99,18 +100,99 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
               <p className="text-gray-500">No se encontraron resultados</p>
             </div>
           )}
-        </div>
+=======
+        {/* Espaciado vertical */}
+        <div className=" ">
+          {/* Header */}
+          <TableHeader
+            title={title}
+            hasItems={assistants.length > 0}
+            onClearAll={clearAll}
+            onNew={openCreateModal}
+          />
 
-        <PaginationFooter
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={sortedData.length}
-          itemsPerPage={itemsPerPage}
-          onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
-          onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-        />
+          {/* Cards */}
+          <div className="space-y-4">
+            {paginatedData.length > 0 ? (
+              paginatedData.map((item, index) => (
+                <AssistantCard
+                  key={item.id || index}
+                  item={item}
+                  index={index}
+                  setButtonRef={(i, el) => {
+                    buttonRefs.current[i] = el;
+                  }}
+                  onMenuToggle={(i) => toggleMenu(i)}
+                />
+              ))
+            ) : (
+              <div className="text-center py-12 bg-white rounded-2xl">
+                <p className="text-gray-500">No se encontraron resultados</p>
+              </div>
+            )}
+          </div>
+
+          <PaginationFooter
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={sortedData.length}
+            itemsPerPage={itemsPerPage}
+            onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+          />
+>>>>>>> cab1462 (Cambios en los componentes)
+        </div>
       </div>
+
+      {/* Floating menu */}
+      <AssistantMenu
+        open={openMenuRow !== null}
+        top={menuPosition.top}
+        left={menuPosition.left}
+        menuRef={dropdownRef}
+        onEdit={() => {
+          if (openMenuRow === null) return;
+          handleEdit(openMenuRow);
+        }}
+        onDelete={() => {
+          if (openMenuRow === null) return;
+          handleDelete(openMenuRow);
+        }}
+        onTrain={() => {
+          if (openMenuRow === null) return;
+          handleTrain(openMenuRow);
+        }}
+      />
+
+      <NewAssistantModal
+        open={isModalOpen}
+        onClose={closeModal}
+        onSubmit={upsertAssistant}
+        initialData={editingAssistantIndex !== null ? assistants[editingAssistantIndex] : undefined}
+      />
+
+      {/* FAB Mobile */}
+      <button
+        type="button"
+        onClick={openCreateModal}
+        disabled={false}
+        className="
+    sm:hidden
+    fixed bottom-5 right-5 z-[60]
+    h-14 w-14 rounded-full
+    bg-gray-900 text-white
+    shadow-lg
+    flex items-center justify-center
+    active:scale-95
+    focus:outline-none focus:ring-2 focus:ring-gray-300
+  "
+        aria-label="New Assistant"
+      >
+        <Plus className="w-6 h-6" />
+      </button>
+
     </div>
+<<<<<<< HEAD
     </div>
 
     {/* Floating menu */}
@@ -160,7 +242,8 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     />
   </div>
 );
-
-}
+=======
+  );
+>>>>>>> cab1462 (Cambios en los componentes)
 
 }
