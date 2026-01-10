@@ -7,8 +7,7 @@ type Props = {
   open: boolean;
   top: number;
   left: number;
-  menuRef: React.RefObject<HTMLDivElement | null>;
-
+  menuRef: React.RefObject<HTMLDivElement | null> ;
 
   onEdit: () => void;
   onDelete: () => void;
