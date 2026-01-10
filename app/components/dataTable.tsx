@@ -62,78 +62,80 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     closeMenu();
   };
 
-  return (
-    <div className="bg-gray-50 p-8 lg:p-0 ">
-      <div className="max-w-7xl mx-auto">
-        <div className="overflow-hidden">
-          {/* Header */}
-          <TableHeader
-            title={title}
-            hasItems={assistants.length > 0}
-            onClearAll={clearAll}
-            onNew={openCreateModal}
-          />
+ return (
+  <div className="bg-gray-50 w-full">
+    {/* Contenedor: full width en mobile, centrado y limitado en desktop */}
+    <div className="w-full ">
 
+      {/* Espaciado vertical */}
+      <div className=" ">
+        {/* Header */}
+        <TableHeader
+          title={title}
+          hasItems={assistants.length > 0}
+          onClearAll={clearAll}
+          onNew={openCreateModal}
+        />
 
-          {/* Cards */}
-          <div className="space-y-4">
-            {paginatedData.length > 0 ? (
-              paginatedData.map((item, index) => (
-                <AssistantCard
-                  key={item.id || index}
-                  item={item}
-                  index={index}
-                  setButtonRef={(i, el) => {
-                    buttonRefs.current[i] = el;
-                  }}
-                  onMenuToggle={(i) => toggleMenu(i)}
-                />
-              ))
-            ) : (
-              <div className="text-center py-12 bg-white rounded-2xl">
-                <p className="text-gray-500">No se encontraron resultados</p>
-              </div>
-            )}
-          </div>
-
-
-          <PaginationFooter
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={sortedData.length}
-            itemsPerPage={itemsPerPage}
-            onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-          />
+        {/* Cards */}
+        <div className="space-y-4">
+          {paginatedData.length > 0 ? (
+            paginatedData.map((item, index) => (
+              <AssistantCard
+                key={item.id || index}
+                item={item}
+                index={index}
+                setButtonRef={(i, el) => {
+                  buttonRefs.current[i] = el;
+                }}
+                onMenuToggle={(i) => toggleMenu(i)}
+              />
+            ))
+          ) : (
+            <div className="text-center py-12 bg-white rounded-2xl">
+              <p className="text-gray-500">No se encontraron resultados</p>
+            </div>
+          )}
         </div>
+
+        <PaginationFooter
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={sortedData.length}
+          itemsPerPage={itemsPerPage}
+          onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
+          onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+        />
       </div>
-
-      {/* Floating menu */}
-      <AssistantMenu
-        open={openMenuRow !== null}
-        top={menuPosition.top}
-        left={menuPosition.left}
-        menuRef={dropdownRef}
-        onEdit={() => {
-          if (openMenuRow === null) return;
-          handleEdit(openMenuRow);
-        }}
-        onDelete={() => {
-          if (openMenuRow === null) return;
-          handleDelete(openMenuRow);
-        }}
-        onTrain={() => {
-          if (openMenuRow === null) return;
-          handleTrain(openMenuRow);
-        }}
-      />
-
-      <NewAssistantModal
-        open={isModalOpen}
-        onClose={closeModal}
-        onSubmit={upsertAssistant}
-        initialData={editingAssistantIndex !== null ? assistants[editingAssistantIndex] : undefined}
-      />
     </div>
-  );
+
+    {/* Floating menu */}
+    <AssistantMenu
+      open={openMenuRow !== null}
+      top={menuPosition.top}
+      left={menuPosition.left}
+      menuRef={dropdownRef}
+      onEdit={() => {
+        if (openMenuRow === null) return;
+        handleEdit(openMenuRow);
+      }}
+      onDelete={() => {
+        if (openMenuRow === null) return;
+        handleDelete(openMenuRow);
+      }}
+      onTrain={() => {
+        if (openMenuRow === null) return;
+        handleTrain(openMenuRow);
+      }}
+    />
+
+    <NewAssistantModal
+      open={isModalOpen}
+      onClose={closeModal}
+      onSubmit={upsertAssistant}
+      initialData={editingAssistantIndex !== null ? assistants[editingAssistantIndex] : undefined}
+    />
+  </div>
+);
+
 }

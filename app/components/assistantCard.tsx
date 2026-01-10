@@ -26,16 +26,16 @@ export function AssistantCard({
   onMenuToggle,
 }: Props) {
   return (
-    <div className="relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all p-4 sm:p-6">
+    <div className="relative bg-white rounded-xl border border-gray-100 shadow-sm transition-all p-3  ">
       {/* Header */}
-      <div className="mb-4 sm:mb-6 pr-10">
-        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1">
+      <div className=" pr-10">
+        <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
           {item.name}
         </h3>
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500">
           <span className="flex items-center gap-1">
-            <Hash className="w-4 h-4" />
+            <Hash className="w-3.5 h-3.5" />
             {item.id}
           </span>
           <span>{item.personality}</span>
@@ -43,7 +43,7 @@ export function AssistantCard({
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
         <ChargesSection charges={item.charges} />
         <SystemsSection systems={item.systems} />
         <SatisfactionSection satisfaction={item.satisfaction} />
@@ -52,7 +52,7 @@ export function AssistantCard({
       {/* Menu button */}
       <button
         ref={(el) => setButtonRef(index, el)}
-        className="absolute top-3 right-3 sm:top-4 sm:right-4 p-3 sm:p-2 rounded-lg hover:bg-gray-100 transition"
+        className="absolute top-2 right-2 sm:top-3 sm:right-3 p-2 rounded-lg hover:bg-gray-100 transition"
         onClick={(e) => {
           e.stopPropagation();
           onMenuToggle(index);
@@ -69,21 +69,21 @@ export function AssistantCard({
 function ChargesSection({ charges }: { charges?: any }) {
   return (
     <Section title="Charges">
-      <div className="flex justify-around sm:justify-start gap-6">
+      <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-6">
         <Metric
-          icon={<PlugZap className="w-5 h-5" />}
+          icon={<PlugZap className="w-4 h-4" />}
           value={charges?.inUse ?? 0}
           label="In use"
           dotClass="bg-green-500"
         />
         <Metric
-          icon={<PlugZap className="w-5 h-5" />}
+          icon={<PlugZap className="w-4 h-4" />}
           value={charges?.free ?? 0}
           label="Free"
           dotClass="bg-blue-400"
         />
         <Metric
-          icon={<PlugZap className="w-5 h-5" />}
+          icon={<PlugZap className="w-4 h-4" />}
           value={charges?.offline ?? 0}
           label="Offline"
           dotClass="bg-gray-300"
@@ -99,9 +99,9 @@ function SystemsSection({ systems }: { systems?: any }) {
       title="Systems"
       className="lg:border-l lg:border-r lg:border-gray-100 lg:px-8"
     >
-      <div className="space-y-4 text-center lg:text-left">
+      <div className="space-y-3">
         <div>
-          <div className="flex items-center justify-center lg:justify-start gap-2 text-green-600 font-medium">
+          <div className="flex items-center gap-2 text-green-600 font-medium text-sm">
             <CheckCircle2 className="w-4 h-4" />
             {systems?.workStatus ?? '—'}
           </div>
@@ -109,8 +109,8 @@ function SystemsSection({ systems }: { systems?: any }) {
         </div>
 
         <div>
-          <div className="flex items-center justify-center lg:justify-start gap-2 text-2xl font-bold text-gray-900">
-            <BarChart3 className="w-5 h-5" />
+          <div className="flex items-center gap-2 text-xl font-bold text-gray-900">
+            <BarChart3 className="w-4 h-4" />
             {systems?.fuelInStorage ?? 0}%
           </div>
           <p className="text-xs text-gray-500">Fuel in storage</p>
@@ -122,10 +122,10 @@ function SystemsSection({ systems }: { systems?: any }) {
 
 function SatisfactionSection({ satisfaction }: { satisfaction?: any }) {
   return (
-    <Section title="Customers satisfaction">
-      <div className="text-center lg:text-left">
-        <div className="flex items-center justify-center lg:justify-start gap-2 text-2xl font-bold text-gray-900">
-          <ThumbsUp className="w-5 h-5" />
+    <Section title="Satisfaction">
+      <div>
+        <div className="flex items-center gap-2 text-xl font-bold text-gray-900">
+          <ThumbsUp className="w-4 h-4" />
           {satisfaction?.percentage ?? 0}%
         </div>
         <p className="text-xs text-gray-500">
@@ -149,7 +149,7 @@ function Section({
 }) {
   return (
     <div className={className}>
-      <h4 className="text-sm font-medium text-gray-500 mb-3 text-center lg:text-left">
+      <h4 className="text-xs font-medium text-gray-500 mb-2">
         {title}
       </h4>
       {children}
@@ -170,11 +170,11 @@ function Metric({
 }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center gap-1 text-xl sm:text-2xl font-bold text-gray-900">
+      <div className="flex items-center gap-1 text-lg sm:text-xl font-bold text-gray-900">
         {icon}
         {value}
       </div>
-      <div className="flex items-center gap-1.5 text-xs text-gray-500">
+      <div className="flex items-center gap-1.5 text-[11px] text-gray-500">
         <span className={`w-2 h-2 rounded-full ${dotClass}`} />
         {label}
       </div>
