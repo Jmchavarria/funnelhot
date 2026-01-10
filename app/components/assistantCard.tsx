@@ -58,7 +58,7 @@ export function AssistantCard({
           onMenuToggle(index);
         }}
       >
-        <EllipsisVertical className="w-5 h-5 text-gray-600" />
+        <EllipsisVertical className="w-5 h-5 text-gray-600 cursor-pointer" />
       </button>
     </div>
   );

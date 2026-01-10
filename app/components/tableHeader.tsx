@@ -1,3 +1,4 @@
+// tableHeader.tsx
 'use client';
 
 import React from 'react';
@@ -9,6 +10,9 @@ type Props = {
   onClearAll: () => void;
   onNew: () => void;
   disabled?: boolean;
+
+  // ✅ NUEVO
+  hideNewOnMobile?: boolean;
 };
 
 export function TableHeader({
@@ -17,59 +21,38 @@ export function TableHeader({
   onClearAll,
   onNew,
   disabled,
+  hideNewOnMobile,
 }: Props) {
   return (
     <div className="mb-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Title */}
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-sm sm:text-2xl lg:text-3xl font-bold text-gray-900 flex items-center gap-2">
           {title}
         </h2>
 
-        {/* Actions */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:gap-3">
+        <div className="flex gap-3">
           {hasItems && (
             <button
               disabled={disabled}
               onClick={() => {
-                if (
-                  confirm(
-                    '¿Estás seguro de eliminar todos los asistentes?',
-                  )
-                ) {
-                  onClearAll();
-                }
+                if (confirm('¿Estás seguro de eliminar todos los asistentes?')) onClearAll();
               }}
-              className="
-                w-full sm:w-auto
-                px-4 py-2
-                flex items-center justify-center gap-2
-                rounded-lg border border-red-200
-                bg-white text-red-600
-                hover:bg-red-50 transition
-                disabled:opacity-60 disabled:cursor-not-allowed
-              "
+              className="px-4 py-2 flex gap-2 items-center justify-center rounded-lg transition cursor-pointer bg-white text-red-600 border border-red-200 hover:bg-red-50 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               Clear All
             </button>
           )}
 
+          {/* ✅ ocultar en mobile si hideNewOnMobile */}
           <button
             disabled={disabled}
             onClick={onNew}
-            className="
-              w-full sm:w-auto
-              px-4 py-2
-              flex items-center justify-center gap-2
-              rounded-lg
-              bg-white text-gray-900
-              shadow-sm
-              hover:bg-gray-50 transition
-              disabled:opacity-60 disabled:cursor-not-allowed
-            "
+            className={[
+              'px-4 py-2 flex gap-2 items-center justify-center rounded-lg transition cursor-pointer bg-white text-gray-900 shadow-sm hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed',
+              hideNewOnMobile ? 'hidden sm:flex' : '',
+            ].join(' ')}
           >
-            New Assistant
-            <Plus className="w-4 h-4" />
+            New Assistant <Plus className="w-4 h-4" />
           </button>
         </div>
       </div>
