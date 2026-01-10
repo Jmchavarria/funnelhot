@@ -56,17 +56,22 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     closeMenu();
   };
 
-  return (
-    <div className="bg-gray-50 w-full relative">
-      <div className="w-full">
+ return (
+  <div className="bg-gray-50 w-full">
+    {/* Contenedor: full width en mobile, centrado y limitado en desktop */}
+    <div className="w-full ">
+
+      {/* Espaciado vertical */}
+      <div className=" ">
+        {/* Header */}
         <TableHeader
           title={title}
           hasItems={assistants.length > 0}
           onClearAll={clearAll}
           onNew={openCreateModal}
-          hideNewOnMobile // ✅ oculta el botón normal en mobile
         />
 
+        {/* Cards */}
         <div className="space-y-4">
           {paginatedData.length > 0 ? (
             paginatedData.map((item, index) => (
@@ -96,51 +101,35 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           onNext={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
         />
       </div>
-
-      {/* ✅ FAB solo en mobile */}
-      <button
-        type="button"
-        onClick={openCreateModal}
-        className="
-          sm:hidden
-          fixed bottom-5 right-5 z-50
-          h-14 w-14 rounded-full
-          bg-gray-900 text-white
-          shadow-xl
-          flex items-center justify-center
-          active:scale-95 transition
-        "
-        aria-label="Crear nuevo asistente"
-      >
-        <Plus className="w-6 h-6" />
-      </button>
-
-      {/* Floating menu */}
-      <AssistantMenu
-        open={openMenuRow !== null}
-        top={menuPosition.top}
-        left={menuPosition.left}
-        menuRef={dropdownRef}
-        onEdit={() => {
-          if (openMenuRow === null) return;
-          handleEdit(openMenuRow);
-        }}
-        onDelete={() => {
-          if (openMenuRow === null) return;
-          handleDelete(openMenuRow);
-        }}
-        onTrain={() => {
-          if (openMenuRow === null) return;
-          handleTrain(openMenuRow);
-        }}
-      />
-
-      <NewAssistantModal
-        open={isModalOpen}
-        onClose={closeModal}
-        onSubmit={upsertAssistant}
-        initialData={editingAssistantIndex !== null ? assistants[editingAssistantIndex] : undefined}
-      />
     </div>
-  );
-};
+
+    {/* Floating menu */}
+    <AssistantMenu
+      open={openMenuRow !== null}
+      top={menuPosition.top}
+      left={menuPosition.left}
+      menuRef={dropdownRef}
+      onEdit={() => {
+        if (openMenuRow === null) return;
+        handleEdit(openMenuRow);
+      }}
+      onDelete={() => {
+        if (openMenuRow === null) return;
+        handleDelete(openMenuRow);
+      }}
+      onTrain={() => {
+        if (openMenuRow === null) return;
+        handleTrain(openMenuRow);
+      }}
+    />
+
+    <NewAssistantModal
+      open={isModalOpen}
+      onClose={closeModal}
+      onSubmit={upsertAssistant}
+      initialData={editingAssistantIndex !== null ? assistants[editingAssistantIndex] : undefined}
+    />
+  </div>
+);
+
+}
