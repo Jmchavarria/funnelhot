@@ -64,6 +64,14 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
       {/* Espaciado vertical */}
       <div className=" ">
         {/* Header */}
+ return (
+  <div className="bg-gray-50 w-full">
+    {/* Contenedor: full width en mobile, centrado y limitado en desktop */}
+    <div className="w-full ">
+
+      {/* Espaciado vertical */}
+      <div className=" ">
+        {/* Header */}
         <TableHeader
           title={title}
           hasItems={assistants.length > 0}
@@ -71,6 +79,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           onNew={openCreateModal}
         />
 
+        {/* Cards */}
         {/* Cards */}
         <div className="space-y-4">
           {paginatedData.length > 0 ? (
@@ -102,7 +111,27 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
         />
       </div>
     </div>
+    </div>
 
+    {/* Floating menu */}
+    <AssistantMenu
+      open={openMenuRow !== null}
+      top={menuPosition.top}
+      left={menuPosition.left}
+      menuRef={dropdownRef}
+      onEdit={() => {
+        if (openMenuRow === null) return;
+        handleEdit(openMenuRow);
+      }}
+      onDelete={() => {
+        if (openMenuRow === null) return;
+        handleDelete(openMenuRow);
+      }}
+      onTrain={() => {
+        if (openMenuRow === null) return;
+        handleTrain(openMenuRow);
+      }}
+    />
     {/* Floating menu */}
     <AssistantMenu
       open={openMenuRow !== null}
@@ -131,5 +160,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
     />
   </div>
 );
+
+}
 
 }
