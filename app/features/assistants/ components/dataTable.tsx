@@ -5,14 +5,14 @@ import { Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { NewAssistantModal } from './newAssistantModal';
-import { PaginationFooter } from './pagination';
-import { DataTableProps } from '../types';
+import { PaginationFooter } from '../../../shared/components/pagination';
+import { DataTableProps } from '../../../types';
 import { AssistantCard } from './assistantCard';
 import { TableHeader } from './tableHeader';
 import { useAssistants } from '../hooks/useAssistants';
-import { useFloatingMenu } from '../hooks/useFloatingMenu';
+import { useFloatingMenu } from '../../../hooks/useFloatingMenu';
 import { AssistantMenu } from './assistantMenu';
-import { SearchBar } from './searchBar';
+import { SearchBar } from '../../../shared/components/searchBar';
 
 export const DataTable: React.FC<DataTableProps> = ({ title }) => {
   const router = useRouter();

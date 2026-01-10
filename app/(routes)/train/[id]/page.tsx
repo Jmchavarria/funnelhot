@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { getAssistantTraining, saveAssistantTraining } from '@/app/lib/trainingStorage';
+import { getAssistantTraining, saveAssistantTraining } from '@/app/features/training/storage/trainingStorage';
 
 type ChatMsg = { role: 'user' | 'assistant'; content: string };
 

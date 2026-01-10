@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 
-import { loadAssistantsFromStorage, clearAssistantsStorage, saveAssistantsToStorage } from '../utils/assistants.storage';
+import { loadAssistantsFromStorage, clearAssistantsStorage, saveAssistantsToStorage } from '../storage/assistants.storage';
 type SortDirection = 'asc' | 'desc';
 
 export type SortConfig = { key: string | null; direction: SortDirection };

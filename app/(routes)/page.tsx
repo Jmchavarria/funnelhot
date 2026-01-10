@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { DataTable } from './components/dataTable';
-import { DataProp } from './types';
+import { DataTable } from '../features/assistants/ components/dataTable';
+import { DataProp } from '../types';
 
 type TrainingStore = Record<
   string,
