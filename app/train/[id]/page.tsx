@@ -152,7 +152,7 @@ export default function TrainPage() {
       {/* Contenedores principales: 1 col mobile / 2 col md+ */}
       <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-10">
         {/* Columna Izquierda - Entrenamiento */}
-        <div className="border border-gray-200 rounded-2xl bg-white shadow-lg p-5 sm:p-6 flex flex-col min-h-0 md:h-[500px]">
+        <div className="border border-gray-200 rounded-2xl bg-white shadow-lg p-5 sm:p-6 flex flex-col min-h-0 md:h-125">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <Lightbulb className='w-5 h-5' />
@@ -170,12 +170,12 @@ export default function TrainPage() {
             placeholder={
               "Ejemplo:\n\nEres un asistente especializado en atención al cliente.\n\nCuando un usuario pregunte sobre productos, siempre menciona...\n\nTu tono debe ser amigable y profesional."
             }
-            className="flex-1 min-h-[260px] md:min-h-0 w-full p-4 border border-gray-200 rounded-xl resize-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm transition-all bg-gray-50"
+            className="flex-1 min-h-65 md:min-h-0 w-full p-4 border border-gray-200 rounded-xl resize-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-sm transition-all bg-gray-50"
           />
 
           <button
             onClick={handleSave}
-            className="mt-3 cursor-pointer sm:mt-4 w-full flex gap-2 items-center justify-center px-6 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all text-sm sm:text-base shadow-md hover:shadow-lg"
+            className="mt-3 cursor-pointer sm:mt-4 w-full flex gap-2 items-center justify-center px-6 py-2.5 sm:py-3  bg-gray-500 hover:bg-gray-700 text-white font-bold rounded-xl transition-all transform hover:scale-105  "
           >
             <Save className='w-5 h-5' />
             Save Training
@@ -183,15 +183,15 @@ export default function TrainPage() {
 
           {/* Toast responsive (verde) */}
           {showSuccess && (
-            <div className="fixed z-50 top-4 left-4 right-4 sm:top-6 sm:right-6 sm:left-auto sm:w-[360px]">
+            <div className="fixed z-50 top-4 left-4 right-4 sm:top-6 sm:right-6 sm:left-auto sm:w-90">
               <div className="flex items-start gap-3 rounded-2xl bg-green-600 px-4 py-3 shadow-xl text-white border border-green-700">
-                <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-green-500 flex-shrink-0">
+                <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-green-500 shrink-0">
                   <span className="text-white text-lg font-bold">✓</span>
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold leading-snug">Entrenamiento guardado</p>
-                  <p className="text-xs text-green-100 break-words">
+                  <p className="text-xs text-green-100 wrap-break-word">
                     La información se guardó correctamente.
                   </p>
 
@@ -202,7 +202,7 @@ export default function TrainPage() {
 
                 <button
                   onClick={() => setShowSuccess(false)}
-                  className="ml-1 rounded-lg px-2 py-1 text-white hover:bg-green-500 flex-shrink-0"
+                  className="ml-1 rounded-lg px-2 py-1 text-white hover:bg-green-500 shrink-0"
                   aria-label="Cerrar"
                 >
                   ✕
@@ -259,8 +259,8 @@ export default function TrainPage() {
               messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div
-                    className={`max-w-[85%] sm:max-w-[75%] px-4 py-2 rounded-2xl text-sm break-words ${msg.role === 'user'
-                      ? 'bg-indigo-600 text-white'
+                    className={`max-w-[85%] sm:max-w-[75%] px-4 py-2 rounded-2xl text-sm wrap-break-words ${msg.role === 'user'
+                      ? 'bg-black text-white'
                       : 'bg-white border border-gray-200 text-gray-800'
                       }`}
                   >
@@ -302,7 +302,7 @@ export default function TrainPage() {
             <button
               onClick={handleSendMessage}
               disabled={!inputMessage.trim() || isTyping}
-              className="cursor-pointer px-4 sm:px-6 py-3 bg-indigo-600 hover:bg-indigo-700 hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none text-white rounded-xl font-semibold transition-all transform hover:scale-105 disabled:hover:scale-100"
+              className="cursor-pointer px-4 sm:px-6 py-3 bg-gray-500 hover:bg-gray-700 hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:shadow-none text-white rounded-xl font-semibold transition-all transform hover:scale-105 disabled:hover:scale-100"
             >
               <Send className='w-5 h-5' />
             </button>
