@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trash, SquarePen, Bot, Check, X } from 'lucide-react';
 
 type Props = {
@@ -8,8 +8,6 @@ type Props = {
   top: number;
   left: number;
   menuRef: React.RefObject<HTMLDivElement | null>;
-
-
   onEdit: () => void;
   onDelete: () => void;
   onTrain: () => void;
@@ -33,9 +31,10 @@ export function AssistantMenu({
   if (!open) return null;
 
   return (
+    // ✅ Solo visible en desktop/tablet
     <div
       ref={menuRef}
-      className="menu-dropdown fixed w-36 bg-white shadow-xl rounded-lg border border-gray-200 z-50 overflow-hidden"
+      className="hidden sm:block menu-dropdown fixed w-36 bg-white shadow-xl rounded-lg border border-gray-200 z-50 overflow-hidden"
       style={{ top: `${top}px`, left: `${left}px` }}
     >
       {!confirmDelete ? (
