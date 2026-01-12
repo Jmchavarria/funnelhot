@@ -14,36 +14,6 @@ type Props = {
   onTrain: () => void;
 };
 
-/**
- * AssistantMenu - Componente de menú contextual para acciones de asistente
- * 
- * Muestra un menú desplegable flotante con opciones para editar, eliminar o entrenar un asistente.
- * Incluye un diálogo de confirmación para acciones de eliminación. Solo visible en pantallas de escritorio/tablet (punto de ruptura sm en adelante).
- * 
- * @component
- * @example
- * ```tsx
- * <AssistantMenu
- *   open={isMenuOpen}
- *   top={mouseY}
- *   left={mouseX}
- *   menuRef={menuRef}
- *   onEdit={handleEdit}
- *   onDelete={handleDelete}
- *   onTrain={handleTrain}
- * />
- * ```
- * 
- * @param {boolean} open - Controla la visibilidad del menú
- * @param {number} top - Posición superior en píxeles para posicionamiento absoluto
- * @param {number} left - Posición izquierda en píxeles para posicionamiento absoluto
- * @param {React.RefObject<HTMLDivElement>} menuRef - Referencia al elemento contenedor del menú
- * @param {() => void} onEdit - Callback ejecutado cuando se hace clic en el botón editar
- * @param {() => void} onDelete - Callback ejecutado cuando se confirma la eliminación
- * @param {() => void} onTrain - Callback ejecutado cuando se hace clic en el botón entrenar
- * 
- * @returns {React.ReactNode} El componente del menú desplegable o null si no está abierto
- */
 export function AssistantMenu({
   open,
   top,
@@ -62,16 +32,23 @@ export function AssistantMenu({
   if (!open) return null;
 
   const itemBase =
-    'cursor-pointer w-full px-4 py-2.5 text-sm flex items-center gap-2 transition-all duration-200 ease-out ' +
+    'cursor-pointer w-full px-4 py-2.5 text-sm flex items-center gap-2 ' +
+    'transition-all duration-200 ease-out ' +
     'hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.99] ' +
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300';
 
+  // Estilo base para los 2 botones de confirmación (mismo tamaño, centrados)
+  const confirmBtnBase =
+    'w-full flex items-center justify-center gap-2 ' +
+    'h-8 px-3 rounded-md text-xs font-medium ' +
+    'transition-all duration-150 ' +
+    'focus:outline-none focus-visible:ring-2';
+
   return (
-    // ✅ Only visible on desktop/tablet
     <div
       ref={menuRef}
       className="
-        hidden sm:block menu-dropdown fixed w-36
+        hidden sm:block menu-dropdown fixed w-40
         bg-white shadow-xl rounded-lg border border-gray-200
         z-50 overflow-hidden
       "
@@ -83,7 +60,7 @@ export function AssistantMenu({
             className={`${itemBase} text-gray-800 hover:bg-gray-100`}
             onClick={onEdit}
           >
-            <SquarePen className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-6" />
+            <SquarePen className="w-4 h-4 transition-transform duration-200 hover:-rotate-6" />
             Edit
           </button>
 
@@ -107,33 +84,34 @@ export function AssistantMenu({
         <div className="p-3 space-y-2">
           <p className="text-xs text-gray-500 text-center">Delete assistant?</p>
 
+          {/* Cancel (outline con borde, como en la imagen) */}
           <button
-            className="
-              cursor-pointer w-full flex items-center justify-center gap-1
-              px-2 py-1.5 rounded-md border text-xs
-              transition-all duration-200 ease-out
-              hover:bg-gray-50 hover:-translate-y-px
-              active:translate-y-0 active:scale-[0.99]
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300
-            "
+            className={`${confirmBtnBase}
+              border border-gray-900 text-gray-900 bg-white
+              hover:bg-gray-50
+              focus-visible:ring-gray-300
+            `}
             onClick={() => setConfirmDelete(false)}
           >
-            <X className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-90" />
+            <X className="w-4 h-4" />
             Cancel
           </button>
 
+          {/* Delete (solid rojo, como en la imagen) */}
           <button
-            className="
-              cursor-pointer w-full flex items-center justify-center gap-1
-              px-2 py-1.5 rounded-md bg-red-600 text-white text-xs
-              transition-all duration-200 ease-out
-              hover:bg-red-700 hover:-translate-y-px
-              active:translate-y-0 active:scale-[0.99]
-              focus:outline-none focus-visible:ring-2 focus-visible:ring-red-200
-            "
-            onClick={onDelete}
+            className={`${confirmBtnBase}
+              bg-red-600 text-white
+              hover:bg-red-700
+              focus-visible:ring-red-200
+            `}
+            onClick={() => {
+              const ok = window.confirm(
+                '¿Seguro que deseas eliminar este assistant? Esta acción no se puede deshacer.'
+              );
+              if (ok) onDelete();
+            }}
           >
-            <Check className="w-3.5 h-3.5 transition-transform duration-200 group-hover:scale-110" />
+            <Check className="w-4 h-4" />
             Delete
           </button>
         </div>
