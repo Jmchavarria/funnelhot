@@ -88,7 +88,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gray-50 px-0 sm:px-6">
-      <div className="w-full p-8">
+      <div className="w-full p-0 sm:p-8">
+
         <DataTable
           data={assistants}     // lista final ya procesada
           columns={columns}     // definición de columnas
