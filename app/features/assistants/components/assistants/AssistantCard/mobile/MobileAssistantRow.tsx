@@ -97,12 +97,12 @@ export function MobileAssistantRow({
         {/* Actions */}
         {!confirmDelete ? (
           <div className="mt-3 grid grid-cols-3 gap-2">
-            <ActionBtn onClick={onEdit} icon={<SquarePen className="w-4 h-4" />} label="Editar" />
-            <ActionBtn onClick={onTrain} icon={<Bot className="w-4 h-4" />} label="Entrenar" />
+            <ActionBtn onClick={onEdit} icon={<SquarePen className="w-4 h-4" />} label="Edit" />
+            <ActionBtn onClick={onTrain} icon={<Bot className="w-4 h-4" />} label="Train" />
             <ActionBtn
               onClick={() => setConfirmDelete(true)}
               icon={<Trash className="w-4 h-4" />}
-              label="Eliminar"
+              label="Delete"
               danger
             />
           </div>
@@ -114,7 +114,7 @@ export function MobileAssistantRow({
               className="flex-1 h-10 rounded-xl border border-gray-200 bg-white text-gray-700 text-sm font-medium active:scale-[0.98] flex items-center justify-center gap-2"
             >
               <X className="w-4 h-4" />
-              Cancelar
+              Cancel
             </button>
             <button
               type="button"
@@ -122,7 +122,7 @@ export function MobileAssistantRow({
               className="flex-1 h-10 rounded-xl bg-red-600 text-white text-sm font-medium active:scale-[0.98] flex items-center justify-center gap-2"
             >
               <Check className="w-4 h-4" />
-              Confirmar
+              Confirm
             </button>
           </div>
         )}
