@@ -48,14 +48,14 @@ export function DesktopAssistantCard({
       {/* Menu button */}
       <button
         ref={(el) => setButtonRef(index, el)}
-        className="absolute top-3 right-3 p-2 rounded-lg hover:bg-gray-100 transition"
+        className="absolute top-3 cursor-pointer right-3 p-2 rounded-lg hover:bg-gray-100 transition"
         onClick={(e) => {
           e.stopPropagation();
           onMenuToggle(index);
         }}
         aria-label="Open menu"
       >
-        <EllipsisVertical className="w-5 h-5 text-gray-600 cursor-pointer" />
+        <EllipsisVertical className="w-5 h-5 text-gray-600 " />
       </button>
     </div>
   );
