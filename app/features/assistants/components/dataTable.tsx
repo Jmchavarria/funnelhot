@@ -157,7 +157,7 @@ export const DataTable: React.FC<DataTableProps> = ({ title }) => {
           <SearchBar
             value={search}
             onChange={setSearch}
-            placeholder="Buscar por nombre, idioma, personalidad o ID…"
+            placeholder="Search by name, language, personality or ID…"
             className="mb-4"
           />
 
