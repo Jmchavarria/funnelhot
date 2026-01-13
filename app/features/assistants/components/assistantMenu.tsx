@@ -39,7 +39,7 @@ export function AssistantMenu({
 
   // Estilo base para los 2 botones de confirmación (mismo tamaño, centrados)
   const confirmBtnBase =
-    'w-full flex items-center justify-center gap-2 ' +
+    'cursor-pointer w-full flex items-center justify-center gap-2 ' +
     'h-8 px-3 rounded-md text-xs font-medium ' +
     'transition-all duration-150 ' +
     'focus:outline-none focus-visible:ring-2';
@@ -100,6 +100,7 @@ export function AssistantMenu({
           {/* Delete (solid rojo, como en la imagen) */}
           <button
             className={`${confirmBtnBase}
+            
               bg-red-600 text-white
               hover:bg-red-700
               focus-visible:ring-red-200
